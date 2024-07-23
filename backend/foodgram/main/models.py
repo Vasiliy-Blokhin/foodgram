@@ -16,6 +16,11 @@ class User(AbstractUser):
         verbose_name='подписка',
         blank=True
     )
+    avatar = models.ImageField(
+        'Аватар',
+        upload_to='users/',
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Пользователь'

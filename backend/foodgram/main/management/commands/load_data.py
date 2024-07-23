@@ -32,6 +32,12 @@ class Command(BaseCommand):
 def add_users():
     with open(directory + 'users.json', encoding='utf-8') as json_file:
         for user in json.load(json_file):
+            with open(
+                directory + 'avatars.json', encoding='utf-8'
+            ) as images_file:
+                image = json.load(images_file)[0].get(
+                    user.get('avatar')
+                )
             if user.get('is_superuser', False):
                 User.objects.create_superuser(
                     email=user.get('email'),
@@ -39,10 +45,20 @@ def add_users():
                     first_name=user.get('first_name'),
                     last_name=user.get('last_name'),
                     password=user.get('password'),
+                    avatar=ContentFile(
+                        base64.b64decode(image),
+                        name=f"{user.get('avatar')}.jpg"
+                    ),
                     is_superuser=True
                 )
             else:
-                User.objects.create_user(**user)
+                User.objects.create_superuser(
+                    email=user.get('email'),
+                    username=user.get('username'),
+                    first_name=user.get('first_name'),
+                    last_name=user.get('last_name'),
+                    password=user.get('password'),
+                )
 
 
 def add_ingredients():
