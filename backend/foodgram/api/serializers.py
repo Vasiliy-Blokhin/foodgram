@@ -12,13 +12,14 @@ from main.models import (Follow, Ingredient, Recipe, RecipeIngredient,
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(validators=(EmailValidator,))
     username = serializers.CharField()
+    avatar = Base64ImageField(required=False)
     is_subscribed = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = User
         fields = (
             'id', 'email', 'username', 'first_name', 'last_name',
-            'is_subscribed'
+            'is_subscribed', 'avatar'
         )
 
     def get_is_subscribed(self, obj):
