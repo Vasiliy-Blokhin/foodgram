@@ -208,7 +208,7 @@ class ShopListViewSet(FavoriteViewSet):
             measurement_unit = recipe_ingredient.measurement_unit
             count = recipe_ingredient.count
             text += (
-                f'\n{index}. {name} -'
+                f'\n{index} {name} -'
                 f'{count} {measurement_unit}.'
             )
             index += 1
