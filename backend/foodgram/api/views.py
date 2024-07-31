@@ -1,3 +1,4 @@
+import shortener
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -227,3 +228,35 @@ class ShopListViewSet(FavoriteViewSet):
         user = self.request.user
         get_object_or_404(RecipeShop, recipe=recipe, user=user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@action(methods=['get'], url_name='about')
+class AboutPage(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+
+
+@action(methods=['get'], url_name='technologies')
+class TechnologiesPage(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+
+
+@action(
+    methods=('GET',),
+    detail=True,
+    permission_classes=(permissions.AllowAny,),
+    url_path='get_link'
+)
+def get_link(self, request, pk=None):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    full_url = request.build_absolute_uri(recipe.get_absolute_url())
+    user = request.user if request.user.is_authenticated else User.objects.first()
+    try:
+        shortcode = shortener.create(user, full_url)
+    except PermissionError as e:
+        return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    short_url = request.build_absolute_uri(f'/s/{shortcode}/')
+
+    return Response({'short_url': short_url}, status=status.HTTP_201_CREATED)
