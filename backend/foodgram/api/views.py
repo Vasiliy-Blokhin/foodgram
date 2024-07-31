@@ -249,7 +249,8 @@ class TechnologiesPage(viewsets.ReadOnlyModelViewSet):
 def get_link(self, request, pk=None):
     recipe = get_object_or_404(Recipe, pk=pk)
     full_url = request.build_absolute_uri(recipe.get_absolute_url())
-    user = request.user if request.user.is_authenticated else User.objects.first()
+    is_authenticated = request.user.is_authenticated
+    user = request.user if is_authenticated else User.objects.first()
     try:
         shortcode = shortener.create(user, full_url)
     except PermissionError as e:
