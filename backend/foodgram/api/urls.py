@@ -20,6 +20,7 @@ router.register('recipes', RecipeViewSet)
 router.register('tags', TagViewSet)
 router.register('auth/token', TokenViewSet)
 router.register('user', ProfileViewSet)
+router.register('users', ProfileViewSet)
 
 
 urlpatterns = [
