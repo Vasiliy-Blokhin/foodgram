@@ -230,12 +230,20 @@ class ShopListViewSet(FavoriteViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get'], url_name='about')
+@action(
+    methods=['get'],
+    url_name='about',
+    detail=False
+    )
 class AboutPage(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
 
 
-@action(methods=['get'], url_name='technologies')
+@action(
+    methods=['get'],
+    url_name='technologies',
+    detail=False
+    )
 class TechnologiesPage(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
 
