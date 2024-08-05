@@ -71,7 +71,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return ProfileSerializer
 
     @action(
-        methods=['get',], detail=False, url_path='me',
+        methods=['get',],
+        detail=False,
+        url_path='me',
         permission_classes=(permissions.IsAuthenticated,)
     )
     def me(self, request):
@@ -79,9 +81,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(
-            methods=['put',  'delete'],
+            methods=['put', 'delete'],
             detail=False,
-            permission_classes=(permissions.IsAuthenticated)
+            permission_classes=(permissions.IsAuthenticated),
+            url_path='me/avatar'
     )
     def avatar(self, request):
         avatar = User.objects.get(User=request.user)
