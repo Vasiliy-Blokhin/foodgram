@@ -1,4 +1,7 @@
+import base64
+
 from django.db.models import Sum
+from django.core.files.base import ContentFile
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets
@@ -84,14 +87,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     @action(
             methods=['put', 'delete'],
-            detail=True,
+            detail=False,
             permission_classes=(permissions.IsAuthenticated),
             url_path='me/avatar'
     )
     def avatar(self, request):
         avatar = User.objects.get(User=request.user)
         if request.method == 'put':
-            avatar.avatar = self.kwargs['avatar']
+            avatar.avatar = ContentFile(
+                        base64.b64decode(self.kwargs['avatar']),
+                        name=f"{avatar.id}.jpg"
+                    )
             avatar.save()
             return Response(
                 avatar,
