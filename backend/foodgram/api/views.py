@@ -234,7 +234,7 @@ class ShopListViewSet(FavoriteViewSet):
     methods=['get'],
     url_name='about',
     detail=False
-    )
+)
 class AboutPage(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
 
@@ -243,7 +243,7 @@ class AboutPage(viewsets.ReadOnlyModelViewSet):
     methods=['get'],
     url_name='technologies',
     detail=False
-    )
+)
 class TechnologiesPage(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
 
