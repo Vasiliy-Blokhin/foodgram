@@ -84,7 +84,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     @action(
             methods=['put', 'delete'],
-            detail=False,
+            detail=True,
             permission_classes=(permissions.IsAuthenticated),
             url_path='me/avatar'
     )

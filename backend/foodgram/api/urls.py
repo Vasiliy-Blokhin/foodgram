@@ -19,16 +19,16 @@ router.register('ingredients', IngredientViewSet)
 router.register('recipes', RecipeViewSet)
 router.register('tags', TagViewSet)
 router.register('auth/token', TokenViewSet)
-router.register('users', ProfileViewSet)
+router.register('user', ProfileViewSet)
 
 
 urlpatterns = [
     path(
-        'users/<int:pk>/subscribe/',
+        'user/<int:pk>/subscribe/',
         SubscribeViewSet.as_view({"post": "create", "delete": "destroy"})
     ),
     path(
-        'users/subscriptions/',
+        'user/subscriptions/',
         SubscribeViewSet.as_view({"get": "list", })
     ),
     path(
