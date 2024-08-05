@@ -1,4 +1,3 @@
-import shortener
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -58,7 +57,10 @@ class TagViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
 
-@action(methods=['get', 'post'], detail=True)
+@action(
+    methods=['get', 'post', 'put', 'delete'],
+    detail=True
+)
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = User.objects.all()
