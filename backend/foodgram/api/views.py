@@ -92,18 +92,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
             url_path='me/avatar'
     )
     def avatar(self, request):
-        avatar = User.objects.get(User=request.user)
         if request.method == 'put':
-            avatar.avatar = ContentFile(
-                        base64.b64decode(self.kwargs['avatar']),
-                        name=f"{avatar.id}.jpg"
-                    )
-            avatar.save()
+            request.user.avatar = request.data.avatar
+            request.user.save()
             return Response(
-                avatar,
                 status=status.HTTP_200_OK
             )
-        avatar.delete()
+        request.user.avatar.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post',], detail=False, url_path='set_password')
