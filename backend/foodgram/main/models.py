@@ -129,7 +129,6 @@ class Recipe(models.Model):
     )
 
     class Meta:
-        app_label = 'shortener'
         ordering = ('pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
