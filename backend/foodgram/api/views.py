@@ -78,6 +78,23 @@ class ProfileViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 
+    @action(
+            methods=['put',  'delete'],
+            detail=False,
+            permission_classes=(permissions.IsAuthenticated)
+    )
+    def avatar(self, request):
+        avatar = User.objects.get(User=request.user)
+        if request.method == 'put':
+            avatar.avatar = self.kwargs['avatar']
+            avatar.save()
+            return Response(
+                avatar,
+                status=status.HTTP_200_OK
+            )
+        avatar.delete()
+        return Response(status.HTTP_204_NO_CONTENT)
+
     @action(methods=['post',], detail=False, url_path='set_password')
     def set_password(self, request):
         serializer = PasswordSerializer(
