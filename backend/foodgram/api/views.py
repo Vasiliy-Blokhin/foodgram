@@ -90,13 +90,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         if request.method == 'put':
-            avatar = Avatar.objects.get(user=request.user)
-            avatar = request.data['avatar']
-            avatar.save()
+            request.user.avatar = request.data['avatar']
+            request.user.save()
             return Response(
                 status=status.HTTP_200_OK
             )
-        avatar.delete()
+        request.user.avatar.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post',], detail=False, url_path='set_password')
