@@ -11,7 +11,7 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              RecipeCreateSerializer, RecipeSerializer,
                              RecipeShopSerializer, SubscribeSerializer,
                              SignupSerializer, TagSerializer, TokenSerializer)
-from main.models import (Avatar, Follow, Ingredient, Recipe, RecipeFavorite,
+from main.models import (Follow, Ingredient, Recipe, RecipeFavorite,
                          RecipeIngredient, RecipeShop, Tag, User)
 from .filter import IngredientSearchFilter, RecipeFilter
 from .pagination import PagePagination

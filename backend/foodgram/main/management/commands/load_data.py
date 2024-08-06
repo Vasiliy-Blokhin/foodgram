@@ -39,7 +39,7 @@ def add_users():
                     user.get('avatar')
                 )
             if user.get('is_superuser', False):
-                author = User.objects.create_superuser(
+                User.objects.create_superuser(
                     email=user.get('email'),
                     username=user.get('username'),
                     first_name=user.get('first_name'),
@@ -52,7 +52,7 @@ def add_users():
                     )
                 )
             else:
-                author = User.objects.create_user(
+                User.objects.create_user(
                     email=user.get('email'),
                     username=user.get('username'),
                     first_name=user.get('first_name'),
