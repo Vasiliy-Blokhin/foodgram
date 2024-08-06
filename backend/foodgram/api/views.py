@@ -90,7 +90,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         if request.method == 'put':
-            request.user.avatar = request.data.avatar
+            request.user.avatar = request.data['avatar']
             request.user.save()
             return Response(
                 status=status.HTTP_200_OK
