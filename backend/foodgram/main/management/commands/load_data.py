@@ -45,11 +45,11 @@ def add_users():
                     first_name=user.get('first_name'),
                     last_name=user.get('last_name'),
                     password=user.get('password'),
-                    is_superuser=True,
                     avatar=ContentFile(
                         base64.b64decode(image),
                         name=f"{user.get('avatar')}.jpg"
-                    )
+                    ),
+                    is_superuser=True
                 )
             else:
                 User.objects.create_user(

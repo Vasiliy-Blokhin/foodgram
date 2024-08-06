@@ -95,7 +95,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
             return Response(
                 status=status.HTTP_200_OK
             )
-        request.user.avatar.delete()
+        request.user.avatar = None
         return Response(status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post',], detail=False, url_path='set_password')
