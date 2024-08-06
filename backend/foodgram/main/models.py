@@ -31,7 +31,7 @@ class Avatar(models.Model):
         upload_to='users/',
         blank=True
     )
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class Tag(models.Model):
