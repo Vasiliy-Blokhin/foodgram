@@ -27,7 +27,7 @@ class User(AbstractUser):
     avatar = models.ForeignKey(
         Avatar,
         on_delete=models.CASCADE,
-        related_name='avatar',
+        related_name='avatars',
         verbose_name='аватар'
     )
 
