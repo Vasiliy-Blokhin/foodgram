@@ -2,6 +2,16 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+
+
+class Avatar(models.Model):
+    avatar = models.ImageField(
+        'Аватар',
+        upload_to='users/',
+        blank=True
+    )
+
+
 class User(AbstractUser):
     first_name = models.CharField(
         verbose_name='имя пользователя', max_length=150, null=True, blank=True)
@@ -16,6 +26,10 @@ class User(AbstractUser):
         verbose_name='подписка',
         blank=True
     )
+    avatar = models.OneToOneField(
+        Avatar,
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -23,16 +37,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-
-
-class Avatar(models.Model):
-    avatar = models.ImageField(
-        'Аватар',
-        upload_to='users/',
-        blank=True
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    
 
 class Tag(models.Model):
     name = models.CharField(

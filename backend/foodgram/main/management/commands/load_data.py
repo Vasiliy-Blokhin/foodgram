@@ -40,29 +40,30 @@ def add_users():
                     user.get('avatar')
                 )
             if user.get('is_superuser', False):
-                author = User.objects.create_superuser(
+                User.objects.create_superuser(
                     email=user.get('email'),
                     username=user.get('username'),
                     first_name=user.get('first_name'),
                     last_name=user.get('last_name'),
                     password=user.get('password'),
-                    is_superuser=True
+                    is_superuser=True,
+                    avatar=ContentFile(
+                        base64.b64decode(image),
+                        name=f"{user.get('avatar')}.jpg"
+                    )
                 )
             else:
-                author = User.objects.create_user(
+                User.objects.create_user(
                     email=user.get('email'),
                     username=user.get('username'),
                     first_name=user.get('first_name'),
                     last_name=user.get('last_name'),
                     password=user.get('password'),
+                    avatar=ContentFile(
+                        base64.b64decode(image),
+                        name=f"{user.get('avatar')}.jpg"
+                    )
                 )
-            Avatar.objects.create(
-                user=author,
-                avatar=ContentFile(
-                    base64.b64decode(image),
-                    name=f"{user.get('avatar')}.jpg"
-                )
-            )
 
 
 def add_ingredients():
