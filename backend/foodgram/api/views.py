@@ -11,7 +11,7 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              RecipeCreateSerializer, RecipeSerializer,
                              RecipeShopSerializer, SubscribeSerializer,
                              SignupSerializer, TagSerializer, TokenSerializer)
-from main.models import (Follow, Ingredient, Recipe, RecipeFavorite,
+from main.models import (Avatar, Follow, Ingredient, Recipe, RecipeFavorite,
                          RecipeIngredient, RecipeShop, Tag, User)
 from .filter import IngredientSearchFilter, RecipeFilter
 from .pagination import PagePagination
@@ -90,12 +90,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         if request.method == 'put':
-            request.user.avatar = request.data['avatar']
-            request.user.save()
+            avatar = Avatar.objects.get(user=request.user)
+            avatar = request.data['avatar']
+            avatar.save()
             return Response(
                 status=status.HTTP_200_OK
             )
-        request.user.avatar.delete()
+        avatar.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post',], detail=False, url_path='set_password')
