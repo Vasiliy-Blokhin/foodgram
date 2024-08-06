@@ -16,11 +16,6 @@ class User(AbstractUser):
         verbose_name='подписка',
         blank=True
     )
-    avatar = models.ImageField(
-        'Аватар',
-        upload_to='users/',
-        blank=True
-    )
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -28,6 +23,15 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Avatar(models.Model):
+    avatar = models.ImageField(
+        'Аватар',
+        upload_to='users/',
+        blank=True
+    )
+    user = models.OneToOneField(User)
 
 
 class Tag(models.Model):
