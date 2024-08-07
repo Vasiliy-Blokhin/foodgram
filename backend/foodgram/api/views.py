@@ -1,4 +1,3 @@
-from django.core.files.base import ContentFile
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -97,7 +96,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(
             status=status.HTTP_200_OK
         )
-
 
     @action(methods=['post',], detail=False, url_path='set_password')
     def set_password(self, request):
