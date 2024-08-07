@@ -1,3 +1,4 @@
+from django.core.files.base import ContentFile
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -90,7 +91,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         if request.method == 'PUT':
-            request.user.avatar = request.data['avatar']
+            request.user.avatar = ContentFile(
+                        request.data['avatar'],
+                        name=f"{request.user.id}.jpg"
+                    )
             request.user.save()
             return Response(
                 status=status.HTTP_200_OK
