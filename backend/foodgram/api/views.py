@@ -92,7 +92,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
             url_path='me/avatar'
     )
     def avatar(self, request):
-        if request.method == 'put':
+        if request.method == 'PUT':
             request.user.avatar = ContentFile(
                         base64.b64decode(request.data['avatar']),
                         name=f"{request.user.id}.jpg"
