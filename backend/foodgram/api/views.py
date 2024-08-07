@@ -90,6 +90,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         user = self.request.user
+        request.data['email'] = user.email
+        request.data['username'] = user.username
         serializer = self.get_serializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
