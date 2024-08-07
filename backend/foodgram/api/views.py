@@ -92,8 +92,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def avatar(self, request):
         if request.method == 'PUT':
             request.user.avatar = ContentFile(
-                        request.data['avatar'],
-                        name=f"{request.user.id}.jpg"
+                        request.data['avatar']
                     )
             request.user.save()
             return Response(
