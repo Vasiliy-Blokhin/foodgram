@@ -45,7 +45,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         methods=('GET',),
         detail=True,
         permission_classes=(permissions.AllowAny,),
-        url_path='get_link'
+        url_path='<int:pk>/get_link'
     )
     def get_link(self, request, pk=None):
         recipe = get_object_or_404(Recipe, pk=pk)
