@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from rest_framework.reverse import reverse
 
 
 class User(AbstractUser):
@@ -141,6 +142,9 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("model_detail", kwargs={"pk": self.pk})
 
 
 class RecipeTag(models.Model):
