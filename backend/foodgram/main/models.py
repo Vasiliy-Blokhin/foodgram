@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from rest_framework.reverse import reverse
@@ -142,9 +143,6 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse("model_detail", kwargs={"pk": self.pk})
 
 
 class RecipeTag(models.Model):
