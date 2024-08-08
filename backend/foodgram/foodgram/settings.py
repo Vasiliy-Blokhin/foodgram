@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'main.apps.MainConfig',
     'api.apps.ApiConfig',
+    'shortener',
 ]
 
 MIDDLEWARE = [

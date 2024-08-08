@@ -1,3 +1,5 @@
+import shortener
+
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -38,6 +40,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action in ('create', 'partial_update'):
             return RecipeCreateSerializer
         return RecipeSerializer
+
+    @action(
+        methods=('GET',),
+        detail=True,
+        permission_classes=(permissions.AllowAny,),
+        url_path='get_link'
+    )
+    def get_link(self, request, pk=None):
+        recipe = get_object_or_404(Recipe, pk=pk)
+        full_url = request.build_absolute_uri(recipe.get_absolute_url())
+        auth_user = request.user.is_authenticated
+        user = request.user if auth_user else User.objects.first()
+        try:
+            shortcode = shortener.create(user, full_url)
+        except PermissionError as e:
+            return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
+        except KeyError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        short_url = request.build_absolute_uri(f'/s/{shortcode}/')
+
+        return Response({'short_url': short_url}, status=status.HTTP_201_CREATED)
 
 
 @action(methods=['get',], detail=True)
@@ -83,7 +107,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(
-            methods=['put'],
+            methods=['put', 'delete'],
             detail=False,
             permission_classes=(permissions.IsAuthenticated,),
             url_path='me/avatar'
