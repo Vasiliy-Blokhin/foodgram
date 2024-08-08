@@ -90,15 +90,22 @@ class ProfileViewSet(viewsets.ModelViewSet):
     )
     def avatar(self, request):
         user = self.request.user
-        request.data['email'] = user.email
-        request.data['username'] = user.username
-        serializer = self.get_serializer(user, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if request.method == 'PUT':
+            request.data['email'] = user.email
+            request.data['username'] = user.username
+            serializer = self.get_serializer(user, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(
+                {'avatar': 'change success.'},
+                status=status.HTTP_200_OK
+            )
+        user.avatar.delete()
+        user.save()
         return Response(
-            {'avatar': 'change success.'},
-            status=status.HTTP_200_OK
-        )
+                {'avatar': 'delete success.'},
+                status=status.HTTP_204_NO_CONTENT
+            )
 
     @action(methods=['post',], detail=False, url_path='set_password')
     def set_password(self, request):
