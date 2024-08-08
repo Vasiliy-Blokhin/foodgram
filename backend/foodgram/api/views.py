@@ -55,13 +55,22 @@ class RecipeViewSet(viewsets.ModelViewSet):
         try:
             shortcode = shortener.create(user, full_url)
         except PermissionError as e:
-            return Response({'error': str(e)}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_403_FORBIDDEN
+            )
         except KeyError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         short_url = request.build_absolute_uri(f'/s/{shortcode}/')
 
-        return Response({'short_url': short_url}, status=status.HTTP_201_CREATED)
+        return Response(
+            {'short_url': short_url},
+            status=status.HTTP_201_CREATED
+        )
 
 
 @action(methods=['get',], detail=True)
