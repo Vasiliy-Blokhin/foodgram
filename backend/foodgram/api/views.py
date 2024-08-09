@@ -62,6 +62,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
 
+@action(
+    methods=('GET',),
+    detail=True,
+    permission_classes=(permissions.AllowAny,),
+)
 def RedirectShortUrl(request, slug):
     recipe_id = ShortUrl.objects.get(
         short_url=ShortUrl.find_slug(slug)
