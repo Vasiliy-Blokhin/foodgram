@@ -275,14 +275,14 @@ class RecipeIngredient(models.Model):
 
 
 class ShortUrl(models.Model):
-    recipe_id = models.PositiveIntegerField(max_length=8)
+    recipe_id = models.PositiveIntegerField()
     short_url = models.SlugField(max_length=10)
 
     @classmethod
     def generate(self):
         return 's/'.join(
             random.choice(string.ascii_letters) for _ in range(
-                self.short_url.max_length
+                10
             )
         )
 
