@@ -48,11 +48,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_path='get-link'
     )
     def get_link(self, request, pk=None):
-        full_url = request.build_absolute_uri(
-            'recipes/' + str(pk)
+        full_url = (
+            'https://foodgram-blokhin.ddns.net/recipes/' + str(pk)
         )
-        auth_user = request.user.is_authenticated
-        user = request.user if auth_user else User.objects.first()
+        user = User.objects.first()
         try:
             shortcode = shortener.create(user, full_url)
         except PermissionError as e:
