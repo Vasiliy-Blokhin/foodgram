@@ -290,7 +290,7 @@ class ShopListViewSet(FavoriteViewSet):
 
     def list(self, request, *args, **kwargs):
         return Response(
-            self.shop_text(),
+            self.shop_text(request),
             content_type='text/plain'
         )
 
