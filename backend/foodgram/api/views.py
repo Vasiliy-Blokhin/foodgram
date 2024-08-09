@@ -260,35 +260,31 @@ class ShopListViewSet(FavoriteViewSet):
             context.update({"pk": self.kwargs.get('pk')})
         return context
 
-    def shop_text(self, request):
-        user = request.user
-
-        ingredients = RecipeIngredient.objects.filter(
+    def shop_text(self, user):
+        ingredient_list = RecipeIngredient.objects.filter(
             recipe__shopping_cart__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
-        ).annotate(amount=Sum('amount'))
-
-        shopping_list = (
-            f'Список покупок для: {user.get_full_name()}\n\n'
-        )
-        shopping_list += '\n'.join([
-            f'- {ingredient["ingredient__name"]} '
-            f'({ingredient["ingredient__measurement_unit"]})'
-            f' - {ingredient["amount"]}'
-            for ingredient in ingredients
-        ])
-
-        filename = f'{user.username}_shopping_list.txt'
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
-
-        return response
+        ).annotate(count=Sum('amount'))
+        index = 1
+        text = 'Корзина покупок:'
+        for recipe_ingredient in ingredient_list:
+            name = recipe_ingredient.name
+            measurement_unit = recipe_ingredient.measurement_unit
+            count = recipe_ingredient.count
+            text += (
+                f'\n{index}. {name} -'
+                f'{count} {measurement_unit}.'
+            )
+            index += 1
+        return text
 
     def list(self, request, *args, **kwargs):
+        user = request.user
+        text = self.shop_text(user)
         return Response(
-            self.shop_text(request),
+            text,
             content_type='text/plain'
         )
 
