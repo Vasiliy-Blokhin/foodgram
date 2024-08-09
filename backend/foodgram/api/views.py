@@ -46,12 +46,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(permissions.AllowAny,),
         url_path='get-link'
     )
-    def get_link(self, request, pk=None):
-        short_url = ShortUrl.generate()
-        ShortUrl.objects.create(
-            recipe_id=pk,
-            short_url=short_url
-        )
+    def get_link(self, request, pk):
+        short_url_obj = ShortUrl.objects.get(recipe_id=pk)
+        if short_url_obj.recipe_id:
+            short_url = short_url_obj.short_url
+        else:
+            short_url = ShortUrl.generate()
+            ShortUrl.objects.create(
+                recipe_id=pk,
+                short_url=short_url
+            )
         short_url = START_URL + short_url
         return Response(
             {'short-link': short_url},
@@ -62,7 +66,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 @action(methods=['get'], detail=True)
 class RedirectShortUrlViewSet(viewsets.ModelViewSet):
 
-    def list(self, slug=None):
+    def list(self, slug):
         recipe_id = get_object_or_404(
             ShortUrl,
             short_url=ShortUrl.find_slug(slug)
