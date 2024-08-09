@@ -6,7 +6,7 @@ from .views import (
     IngredientViewSet,
     ProfileViewSet,
     RecipeViewSet,
-    RedirectShortUrlViewSet,
+    RedirectShortUrl,
     ShopListViewSet,
     SubscribeViewSet,
     TagViewSet,
@@ -26,7 +26,7 @@ router.register('users', ProfileViewSet)
 urlpatterns = [
     path(
         's/<slug:slug>/',
-        RedirectShortUrlViewSet.as_view({"get": "list"})
+        RedirectShortUrl
     ),
     path(
         'user/<int:pk>/subscribe/',
