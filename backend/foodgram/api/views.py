@@ -70,7 +70,7 @@ class RedirectShortUrlViewSet(viewsets.ModelViewSet):
             ShortUrl,
             short_url=ShortUrl.find_slug(slug)
         )
-        return redirect(RECIPE_URL + recipe_id.recipe_id)
+        return redirect(RECIPE_URL + str(recipe_id.recipe_id))
 
 
 @action(methods=['get',], detail=True)

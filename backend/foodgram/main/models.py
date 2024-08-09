@@ -288,4 +288,4 @@ class ShortUrl(models.Model):
 
     @classmethod
     def find_slug(self, slug):
-        return 's/'.join(slug)
+        return 's/' + slug
