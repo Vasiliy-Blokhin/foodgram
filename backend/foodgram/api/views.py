@@ -262,8 +262,6 @@ class ShopListViewSet(FavoriteViewSet):
 
     def shop_text(self, request):
         user = request.user
-        if not user.shopping_cart.exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         ingredients = RecipeIngredient.objects.filter(
             recipe__shopping_cart__user=user
