@@ -52,7 +52,7 @@ git clone https://github.com/Vasiliy-Blokhin/foodgram/
    Перейдите в папку:
    ```
    cd foodgram/infra
-
+   ```
    Обновите образы:
    ```
    sudo docker compose -f docker-compose.production.yml pull
