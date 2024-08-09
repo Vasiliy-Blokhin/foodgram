@@ -276,7 +276,7 @@ class RecipeIngredient(models.Model):
 
 class ShortUrl(models.Model):
     recipe_id = models.PositiveIntegerField()
-    short_url = models.SlugField(max_length=10)
+    short_url = models.SlugField(max_length=64)
 
     @classmethod
     def generate(self):
