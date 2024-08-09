@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 
 from main.models import (
     Follow,
-    Ingredient, 
+    Ingredient,
     Recipe,
     RecipeIngredient,
     RecipeShop,
