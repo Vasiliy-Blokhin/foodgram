@@ -2,7 +2,7 @@ from shortener import shortener
 
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
@@ -15,8 +15,9 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              SignupSerializer, TagSerializer, TokenSerializer)
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
+from api.module import RECIPE_URL, START_URL
 from main.models import (Follow, Ingredient, Recipe, RecipeFavorite,
-                         RecipeIngredient, RecipeShop, Tag, User)
+                         RecipeIngredient, RecipeShop, ShortUrl, Tag, User)
 
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
@@ -48,30 +49,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_path='get-link'
     )
     def get_link(self, request, pk=None):
-        full_url = (
-            'https://foodgram-blokhin.ddns.net/recipes/' + str(pk)
+        short_url = ShortUrl.generate()
+        ShortUrl.objects.create(
+            recipe_id=pk,
+            short_url=short_url
         )
-        user = User.objects.first()
-        try:
-            shortcode = shortener.create(user, full_url)
-            shortcode.save()
-        except PermissionError as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        except KeyError as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        short_url = request.build_absolute_uri(f'/s/{shortcode}/')
-
+        short_url = START_URL + short_url
         return Response(
             {'short-link': short_url},
             status=status.HTTP_201_CREATED
         )
+
+
+@action(methods=['get'], detail=True)
+class RedirectShortUrlViewSet(viewsets.ModelViewSet):
+
+    def list(self, slug=None):
+        recipe_id = get_object_or_404(
+            ShortUrl,
+            short_url=ShortUrl.find_slug(slug)
+        )
+        return redirect(RECIPE_URL + recipe_id.recipe_id)
+
 
 
 @action(methods=['get',], detail=True)

@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -269,3 +272,20 @@ class RecipeIngredient(models.Model):
                 fields=['recipe', 'ingredient']
             ),
         ]
+
+
+class ShortUrl(models.Model):
+    recipe_id = models.PositiveIntegerField(max_length=8)
+    short_url = models.SlugField(max_length=10)
+
+    @classmethod
+    def generate(self):
+        return 's/'.join(
+            random.choice(string.ascii_letters) for _ in range(
+                self.short_url.max_length
+            )
+        )
+
+    @classmethod
+    def find_slug(self, slug):
+        return 's/'.join(slug)
