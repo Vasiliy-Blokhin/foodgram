@@ -266,7 +266,7 @@ class ShopListViewSet(FavoriteViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         ingredients = RecipeIngredient.objects.filter(
-            recipe__shopping_cart__user=request.user
+            recipe__shopping_cart__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
@@ -289,10 +289,8 @@ class ShopListViewSet(FavoriteViewSet):
         return response
 
     def list(self, request, *args, **kwargs):
-        user = request.user
-        text = self.shop_text(user)
         return Response(
-            text,
+            self.shop_text(),
             content_type='text/plain'
         )
 
