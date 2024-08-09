@@ -6,23 +6,40 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.serializers import (FavoriteSerializer, IngredientSerializer,
-                             ProfileSerializer, PasswordSerializer,
-                             RecipeCreateSerializer, RecipeSerializer,
-                             RecipeShopSerializer, SubscribeSerializer,
-                             SignupSerializer, TagSerializer, TokenSerializer)
+from api.serializers import (
+    FavoriteSerializer,
+    IngredientSerializer,
+    ProfileSerializer,
+    PasswordSerializer,
+    RecipeCreateSerializer,
+    RecipeSerializer,
+    RecipeShopSerializer,
+    SubscribeSerializer,
+    SignupSerializer,
+    TagSerializer,
+    TokenSerializer
+)
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
 from api.module import RECIPE_URL, START_URL
-from main.models import (Follow, Ingredient, Recipe, RecipeFavorite,
-                         RecipeIngredient, RecipeShop, ShortUrl, Tag, User)
+from main.models import (
+    Follow,
+    Ingredient,
+    Recipe,
+    RecipeFavorite,
+    RecipeIngredient,
+    RecipeShop,
+    ShortUrl,
+    Tag,
+    User
+)
 
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-pub_date')
     serializer_class = RecipeSerializer
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
     pagination_class = PagePagination
 
@@ -75,16 +92,16 @@ def RedirectShortUrl(request, slug):
     return redirect(RECIPE_URL + str(recipe_id.recipe_id))
 
 
-@action(methods=['get',], detail=True)
+@action(methods=['get', ], detail=True)
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = [IngredientSearchFilter,]
+    filter_backends = [IngredientSearchFilter, ]
     search_fields = ('name',)
     pagination_class = None
 
 
-@action(methods=['get',], detail=True)
+@action(methods=['get', ], detail=True)
 class TagViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Tag.objects.all()
@@ -100,7 +117,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
 
     def get_serializer_class(self):
         if self.action in ('create',):
@@ -108,7 +125,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return ProfileSerializer
 
     @action(
-        methods=['get',],
+        methods=['get', ],
         detail=False,
         url_path='me',
         permission_classes=(permissions.IsAuthenticated,)
@@ -118,7 +135,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(
-            methods=['put', 'delete'],
+            methods=['put', 'delete', ],
             detail=False,
             permission_classes=(permissions.IsAuthenticated,),
             url_path='me/avatar'
@@ -138,11 +155,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
         user.avatar.delete()
         user.save()
         return Response(
-                {'avatar': 'delete success.'},
-                status=status.HTTP_204_NO_CONTENT
-            )
+            {'avatar': 'delete success.'},
+            status=status.HTTP_204_NO_CONTENT
+        )
 
-    @action(methods=['post',], detail=False, url_path='set_password')
+    @action(methods=['post', ], detail=False, url_path='set_password')
     def set_password(self, request):
         serializer = PasswordSerializer(
             data=request.data, partial=True, context={'request': request}
@@ -152,7 +169,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get', 'post', 'delete',], detail=True,)
+@action(methods=['get', 'post', 'delete', ], detail=True,)
 class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscribeSerializer
 
@@ -193,7 +210,7 @@ class TokenViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
     @action(
-        methods=['post',], detail=False, url_path='login',
+        methods=['post', ], detail=False, url_path='login',
         permission_classes=[permissions.AllowAny]
     )
     def login(self, request):
@@ -205,7 +222,7 @@ class TokenViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
-        methods=['post',], detail=False, url_path='logout',
+        methods=['post', ], detail=False, url_path='logout',
         permission_classes=[permissions.IsAuthenticated]
     )
     def logout(self, request):
@@ -217,7 +234,7 @@ class TokenViewSet(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['post', 'delete',], detail=True)
+@action(methods=['post', 'delete', ], detail=True)
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = FavoriteSerializer
@@ -233,7 +250,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({
-            "request": self.request,
+            'request': self.request,
         })
         if self.kwargs.get('pk'):
             context.update({"pk": self.kwargs.get('pk')})
