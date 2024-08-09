@@ -13,10 +13,10 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              RecipeCreateSerializer, RecipeSerializer,
                              RecipeShopSerializer, SubscribeSerializer,
                              SignupSerializer, TagSerializer, TokenSerializer)
+from api.filter import IngredientSearchFilter, RecipeFilter
+from api.pagination import PagePagination
 from main.models import (Follow, Ingredient, Recipe, RecipeFavorite,
                          RecipeIngredient, RecipeShop, Tag, User)
-from .filter import IngredientSearchFilter, RecipeFilter
-from .pagination import PagePagination
 
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
