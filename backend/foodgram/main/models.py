@@ -40,11 +40,6 @@ class Tag(models.Model):
         help_text='Введите название тега',
         unique=True
     )
-    color = models.CharField(
-        max_length=7,
-        verbose_name='цвет тега',
-        help_text='Введите цвет тега начиная c #'
-    )
     slug = models.SlugField(
         verbose_name='идентификатор тега',
         help_text='Введите идентификатор тега',
