@@ -256,26 +256,22 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def ingredients_create(self, ingredients, recipe):
         RecipeIngredient.objects.bulk_create(
-                [
-                    RecipeIngredient(
-                        recipe=recipe,
-                        amount=int(ingredient['amount']),
-                        ingredient=get_object_or_404(
-                            Ingredient,
-                            id=ingredient['id']
-                        )
-                    ) for ingredient in ingredients
-                ]
+                [RecipeIngredient(
+                    recipe=recipe,
+                    amount=int(ingredient['amount']),
+                    ingredient=get_object_or_404(
+                        Ingredient,
+                        id=ingredient['id']
+                    )
+                ) for ingredient in ingredients]
         )
 
     def tags_create(self, tags, recipe):
         RecipeTag.objects.bulk_create(
-                [
-                    RecipeTag(
+                [RecipeTag(
                         recipe=recipe,
                         tag=get_object_or_404(Tag, id=tag_id)
-                    ) for tag_id in tags
-                ]
+                    ) for tag_id in tags]
         )
 
     def create(self, validated_data):

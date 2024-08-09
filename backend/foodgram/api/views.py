@@ -135,10 +135,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(
-            methods=['put', 'delete', ],
-            detail=False,
-            permission_classes=(permissions.IsAuthenticated,),
-            url_path='me/avatar'
+        methods=['put', 'delete', ],
+        detail=False,
+        permission_classes=(permissions.IsAuthenticated,),
+        url_path='me/avatar'
     )
     def avatar(self, request):
         user = self.request.user
@@ -263,7 +263,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get', 'post', 'delete',], detail=True)
+@action(methods=['get', 'post', 'delete', ], detail=True)
 class ShopListViewSet(FavoriteViewSet):
     serializer_class = RecipeShopSerializer
 
