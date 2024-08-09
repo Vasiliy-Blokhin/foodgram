@@ -68,7 +68,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         short_url = request.build_absolute_uri(f'/s/{shortcode}/')
 
         return Response(
-            {'short_url': short_url},
+            {'short-link': short_url},
             status=status.HTTP_201_CREATED
         )
 
