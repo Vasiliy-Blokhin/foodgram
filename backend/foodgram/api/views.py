@@ -1,5 +1,3 @@
-from shortener import shortener
-
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404, redirect
@@ -70,7 +68,6 @@ class RedirectShortUrlViewSet(viewsets.ModelViewSet):
             short_url=ShortUrl.find_slug(slug)
         )
         return redirect(RECIPE_URL + recipe_id.recipe_id)
-
 
 
 @action(methods=['get',], detail=True)
