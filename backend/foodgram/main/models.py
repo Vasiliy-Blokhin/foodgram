@@ -280,7 +280,7 @@ class ShortUrl(models.Model):
 
     @classmethod
     def generate(self):
-        return 's/'.join(
+        return 's/' + ''.join(
             random.choice(string.ascii_letters) for _ in range(
                 8
             )
