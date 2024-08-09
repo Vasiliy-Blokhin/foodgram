@@ -276,7 +276,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                         tag=get_object_or_404(Tag, id=tag_id)
                     ) for tag_id in tags
                 ]
-            )
+        )
 
     def create(self, validated_data):
         request = self.context.get("request")
