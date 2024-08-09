@@ -47,8 +47,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_path='get-link'
     )
     def get_link(self, request, pk):
-        short_url_obj = ShortUrl.objects.get(recipe_id=pk)
-        if short_url_obj.recipe_id:
+        short_url_obj = ShortUrl.objects.all().filter(recipe_id=pk)
+        if isinstance(short_url_obj.recipe_id, int):
             short_url = short_url_obj.short_url
         else:
             short_url = ShortUrl.generate()
