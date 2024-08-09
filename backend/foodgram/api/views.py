@@ -1,4 +1,4 @@
-import shortener
+from shortener import shortener
 
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
