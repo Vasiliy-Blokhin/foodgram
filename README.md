@@ -79,5 +79,5 @@ git clone https://github.com/Vasiliy-Blokhin/foodgram/
 
 
 ## Работу выполнил:
-Василий Блохин
+Василий Блохин.
 
