@@ -48,7 +48,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_path='get-link'
     )
     def get_link(self, request, pk=None):
-        full_url = request.build_absolute_uri()
+        full_url = request.build_absolute_uri(
+            'recipes/' + str(pk)
+        )
         auth_user = request.user.is_authenticated
         user = request.user if auth_user else User.objects.first()
         try:
