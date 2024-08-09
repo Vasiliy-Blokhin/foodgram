@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
@@ -68,7 +69,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes=(permissions.AllowAny,),
 )
 def RedirectShortUrl(request, slug):
-    recipe_id = ShortUrl.objects.get(
+    recipe_id = get_object_or_404(
+        ShortUrl,
         short_url=ShortUrl.find_slug(slug)
     )
     return redirect(RECIPE_URL + str(recipe_id.recipe_id))
@@ -258,25 +260,33 @@ class ShopListViewSet(FavoriteViewSet):
             context.update({"pk": self.kwargs.get('pk')})
         return context
 
-    def shop_text(self, user):
-        ingredient_list = RecipeIngredient.objects.filter(
-            recipe__shopping_cart__user=user
+    def shop_text(self, request):
+        user = request.user
+        if not user.shopping_cart.exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        ingredients = RecipeIngredient.objects.filter(
+            recipe__shopping_cart__user=request.user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
-        ).annotate(count=Sum('amount'))
-        index = 1
-        text = 'Корзина покупок:'
-        for recipe_ingredient in ingredient_list:
-            name = recipe_ingredient.name
-            measurement_unit = recipe_ingredient.measurement_unit
-            count = recipe_ingredient.count
-            text += (
-                f'\n{index}. {name} -'
-                f'{count} {measurement_unit}.'
-            )
-            index += 1
-        return text
+        ).annotate(amount=Sum('amount'))
+
+        shopping_list = (
+            f'Список покупок для: {user.get_full_name()}\n\n'
+        )
+        shopping_list += '\n'.join([
+            f'- {ingredient["ingredient__name"]} '
+            f'({ingredient["ingredient__measurement_unit"]})'
+            f' - {ingredient["amount"]}'
+            for ingredient in ingredients
+        ])
+
+        filename = f'{user.username}_shopping_list.txt'
+        response = HttpResponse(shopping_list, content_type='text/plain')
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
+        return response
 
     def list(self, request, *args, **kwargs):
         user = request.user

@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (
     FavoriteViewSet,
+    FavoritesListViewSet,
     IngredientViewSet,
     ProfileViewSet,
     RecipeViewSet,
@@ -38,7 +39,14 @@ urlpatterns = [
     ),
     path(
         'recipes/<int:pk>/favorite/',
-        FavoriteViewSet.as_view({"post": "create", "delete": "destroy"})
+        FavoriteViewSet.as_view({
+            "post": "create",
+            "delete": "destroy"
+        })
+    ),
+    path(
+        'favorites/',
+        FavoritesListViewSet.as_view({"get": "list"})
     ),
     path(
         'recipes/download_shopping_cart/',
