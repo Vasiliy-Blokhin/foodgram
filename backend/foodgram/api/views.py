@@ -54,6 +54,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = User.objects.first()
         try:
             shortcode = shortener.create(user, full_url)
+            shortcode.save()
         except PermissionError as e:
             return Response(
                 {'error': str(e)},
