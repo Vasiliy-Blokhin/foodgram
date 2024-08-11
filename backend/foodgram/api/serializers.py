@@ -12,8 +12,7 @@ from rest_framework.authtoken.models import Token
 
 from main.constants import (
     MAX_AMOUNT,
-    MIN_AMOUNT,
-    MAX_EMAIL_LENGTH
+    MIN_AMOUNT
 )
 from main.models import (
     Follow,
@@ -52,8 +51,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class SignupSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
-        validators=(EmailValidator,),
-        max_length=MAX_EMAIL_LENGTH
+        validators=(EmailValidator,)
     )
     username = serializers.CharField(max_length=150)
     first_name = serializers.CharField(max_length=150)

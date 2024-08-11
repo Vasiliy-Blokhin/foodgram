@@ -7,10 +7,11 @@ from django.db import models
 
 from main.constants import (
     MAX_COOK_TIME,
+    MAX_EMAIL_LENGTH,
     MAX_LENGTH,
     MIN_COOK_TIME,
     SHORT_URL_LENGTH,
-    SHORT_URL_SPLIT
+    SHORT_URL_SPLIT,
 )
 
 
@@ -38,6 +39,10 @@ class User(AbstractUser):
         'Аватар',
         upload_to='users/',
         blank=True
+    )
+    email = models.EmailField(
+        max_length=MAX_EMAIL_LENGTH,
+        unique=True
     )
 
     USERNAME_FIELD = 'email'
