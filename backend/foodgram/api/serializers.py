@@ -144,7 +144,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = (
-            'id', 'name', 'color', 'slug'
+            'id', 'name', 'slug'
         )
 
 
