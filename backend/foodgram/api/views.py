@@ -207,6 +207,7 @@ class SubscribeViewSet(viewsets.ModelViewSet):
 @action(methods=[], detail=False)
 class TokenViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
+    serializer_class = TokenSerializer
 
     @action(
         methods=['post', ], detail=False, url_path='login',
