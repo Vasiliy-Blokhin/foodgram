@@ -21,7 +21,7 @@ from api.serializers import (
 )
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
-from api.module import RECIPE_URL, START_URL
+from foodgram.constants import RECIPE_URL, START_URL
 from main.models import (
     Follow,
     Ingredient,
@@ -64,7 +64,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         url_path='get-link'
     )
     def get_link(self, request, pk):
-        if len(ShortUrl.objects.all().filter(recipe_id=pk)):
+        if len(ShortUrl.objects.filter(recipe_id=pk)):
             short_url = ShortUrl.objects.get(recipe_id=pk).short_url
         else:
             short_url = ShortUrl.generate()
@@ -193,10 +193,9 @@ class SubscribeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.action in ('create',):
             return User.objects.all()
-        else:
-            return User.objects.filter(
-                following__in=self.get_follow()
-            ).distinct()
+        return User.objects.filter(
+            following__in=self.get_follow()
+        ).distinct()
 
     def destroy(self, request, *args, **kwargs):
         author = get_object_or_404(User, id=self.kwargs.get('pk'))
@@ -242,10 +241,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.action in ('create',):
             return User.objects.all()
-        else:
-            return User.objects.filter(
-                following__in=self.get_follow()
-            ).distinct()
+        return User.objects.filter(
+            following__in=self.get_follow()
+        ).distinct()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -283,17 +281,16 @@ class ShopListViewSet(FavoriteViewSet):
             'ingredient__name',
             'ingredient__measurement_unit'
         ).annotate(count=Sum('amount'))
-        index = 1
         text = 'Корзина покупок:'
-        for recipe_ingredient in ingredient_list:
+        for index, recipe_ingredient in enumerate(ingredient_list):
             name = recipe_ingredient.name
             measurement_unit = recipe_ingredient.measurement_unit
             count = recipe_ingredient.count
-            text += (
+            ingredient = (
                 f'\n{index}. {name} -'
                 f'{count} {measurement_unit}.'
             )
-            index += 1
+            text.join(ingredient)
         return text
 
     def list(self, request, *args, **kwargs):

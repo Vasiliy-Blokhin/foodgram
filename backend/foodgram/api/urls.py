@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import (
+from api.views import (
     FavoriteViewSet,
     IngredientViewSet,
     ProfileViewSet,
@@ -12,6 +12,7 @@ from .views import (
     TagViewSet,
     TokenViewSet,
 )
+from foodgram.constants import SHORT_URL_SPLIT
 
 
 router = DefaultRouter()
@@ -25,7 +26,7 @@ router.register('users', ProfileViewSet)
 
 urlpatterns = [
     path(
-        's/<slug:slug>/',
+        SHORT_URL_SPLIT + '<slug:slug>/',
         RedirectShortUrl
     ),
     path(
