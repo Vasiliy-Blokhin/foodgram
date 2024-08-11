@@ -141,7 +141,7 @@ class Recipe(models.Model):
     is_in_shopping_cart = models.ManyToManyField(
         User,
         through='RecipeShop',
-        related_name='recipes_shop',
+        related_name='recipe_shop',
         verbose_name='рецепт в корзине'
     )
     ingredients = models.ManyToManyField(
