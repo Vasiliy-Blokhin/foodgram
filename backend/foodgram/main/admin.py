@@ -7,8 +7,7 @@ from .models import (Follow, Ingredient, Recipe, RecipeFavorite,
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'slug', 'color')
-    search_fields = ('color',)
+    list_display = ('id', 'name', 'slug')
     list_filter = ('name',)
     empty_value_display = '-пусто-'
 
