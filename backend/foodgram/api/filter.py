@@ -10,8 +10,8 @@ class RecipeFilter(FilterSet):
                                              queryset=Tag.objects.all(),
                                              to_field_name='slug')
     is_favorited = filters.BooleanFilter(method='filter_is_favorited')
-    is_in_shopping_cart = filters.BooleanFilter(
-        method='filter_is_in_shopping_cart'
+    recipe_shop = filters.BooleanFilter(
+        method='filter_recipe_shop'
     )
 
     def filter_is_favorited(self, queryset, name, value):
@@ -19,7 +19,7 @@ class RecipeFilter(FilterSet):
             return queryset.filter(recipe_favorite__user=self.request.user)
         return queryset
 
-    def filter_is_in_shopping_cart(self, queryset, name, value):
+    def filter_recipe_shop(self, queryset, name, value):
         if self.request.user.id:
             return queryset.filter(recipe_shop__user=self.request.user)
         return queryset

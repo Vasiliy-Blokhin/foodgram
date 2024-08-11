@@ -82,6 +82,7 @@ class TokenSerializer(serializers.ModelSerializer):
             'email', 'password', 'auth_token'
         )
 
+    @staticmethod
     def get_user_email(self, email):
         return get_object_or_404(
             User, email=email
@@ -89,20 +90,18 @@ class TokenSerializer(serializers.ModelSerializer):
 
     def get_auth_token(self, obj):
         request = self.context.get('request')
-        print(request)
         if request.data.get('email') and request.data.get('password'):
             password = request.data['password']
             email = request.data['email']
-            user = self.get_user_email(email)
+            user = self.get_user_email(self, email)
             if user.check_password(password):
                 token = Token.objects.get(user=user)
                 return token.key
 
     def create(self, validated_data):
-        print(validated_data)
         password = validated_data.get('password')
         email = validated_data.get('email')
-        user = self.get_user_email(email)
+        user = self.get_user_email(self, email)
         if user.check_password(password):
             token = Token.objects.get_or_create(user=user)
             return token
