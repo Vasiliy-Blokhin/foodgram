@@ -138,7 +138,7 @@ class Recipe(models.Model):
         related_name='recipes_favorite',
         verbose_name='лайк рецепт'
     )
-    shopping_cart = models.ManyToManyField(
+    is_in_shopping_cart = models.ManyToManyField(
         User,
         through='RecipeShop',
         related_name='recipes_shop',

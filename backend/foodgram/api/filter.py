@@ -21,9 +21,7 @@ class RecipeFilter(FilterSet):
 
     def filter_shopping_cart(self, queryset, name, value):
         if self.request.user.id:
-            return queryset.filter(
-                recipe_shopping_cart__user=self.request.user
-            )
+            return queryset.filter(recipe_shop__user=self.request.user)
         return queryset
 
     class Meta:
