@@ -1,6 +1,10 @@
 from drf_extra_fields.fields import Base64ImageField
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator, MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    EmailValidator,
+    MaxValueValidator,
+    MinValueValidator
+)
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
