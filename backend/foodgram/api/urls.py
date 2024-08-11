@@ -12,7 +12,7 @@ from api.views import (
     TagViewSet,
     TokenViewSet,
 )
-from backend.foodgram.main.constants import SHORT_URL_SPLIT
+from main.constants import SHORT_URL_SPLIT
 
 
 router = DefaultRouter()

@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from backend.foodgram.main.constants import (
+from main.constants import (
     MAX_COOK_TIME,
     MAX_LENGTH,
     MIN_COOK_TIME,

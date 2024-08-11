@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from backend.foodgram.main.constants import (
+from main.constants import (
     MAX_AMOUNT,
     MIN_AMOUNT,
     MAX_EMAIL_LENGTH

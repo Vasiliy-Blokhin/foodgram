@@ -21,7 +21,7 @@ from api.serializers import (
 )
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
-from backend.foodgram.main.constants import RECIPE_URL, START_URL
+from main.constants import RECIPE_URL, START_URL
 from main.models import (
     Follow,
     Ingredient,
