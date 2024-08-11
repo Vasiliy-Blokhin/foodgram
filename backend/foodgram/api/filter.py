@@ -9,7 +9,6 @@ class RecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(field_name='tags__slug',
                                              queryset=Tag.objects.all(),
                                              to_field_name='slug')
-    author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method='filter_is_favorited')
     is_in_shopping_cart = filters.BooleanFilter(
         method='filter_is_in_shopping_cart'
@@ -27,6 +26,7 @@ class RecipeFilter(FilterSet):
 
     class Meta:
         model = Recipe
+        author = User
         fields = ['tags', 'author']
 
 
