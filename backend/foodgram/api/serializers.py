@@ -90,6 +90,7 @@ class TokenSerializer(serializers.ModelSerializer):
 
     def get_auth_token(self, obj):
         request = self.context.get('request')
+        print(request)
         if request.data.get('email') and request.data.get('password'):
             password = request.data['password']
             email = request.data['email']
@@ -99,6 +100,7 @@ class TokenSerializer(serializers.ModelSerializer):
                 return token.key
 
     def create(self, validated_data):
+        print(validated_data)
         password = validated_data.get('password')
         email = validated_data.get('email')
         user = self.get_user_email(email)
