@@ -2,14 +2,29 @@ import random
 import string
 
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from backend.foodgram.main.constants import (
+    MAX_COOK_TIME,
+    MAX_LENGTH,
+    MIN_COOK_TIME,
+    SHORT_URL_LENGTH,
+    SHORT_URL_SPLIT
+)
 
 
 class User(AbstractUser):
     first_name = models.CharField(
-        verbose_name='имя пользователя', max_length=150, null=True, blank=True)
+        verbose_name='имя пользователя',
+        max_length=MAX_LENGTH,
+        null=True,
+        blank=True
+    )
     last_name = models.CharField(
-        verbose_name='фамилия пользователя', max_length=150, null=True,
+        verbose_name='фамилия пользователя',
+        max_length=MAX_LENGTH,
+        null=True,
         blank=True
     )
     is_subscribed = models.ManyToManyField(
@@ -25,6 +40,13 @@ class User(AbstractUser):
         blank=True
     )
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [
+        'username',
+        'first_name',
+        'last_name'
+    ]
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -35,15 +57,10 @@ class User(AbstractUser):
 
 class Tag(models.Model):
     name = models.CharField(
-        max_length=200,
+        max_length=MAX_LENGTH,
         verbose_name='название тега',
         help_text='Введите название тега',
         unique=True
-    )
-    color = models.CharField(
-        max_length=7,
-        verbose_name='цвет тега',
-        help_text='Введите цвет тега начиная c #'
     )
     slug = models.SlugField(
         verbose_name='идентификатор тега',
@@ -62,12 +79,12 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        max_length=200,
+        max_length=MAX_LENGTH,
         verbose_name='название ингредиента',
         help_text='Введите название ингредиента',
     )
     measurement_unit = models.CharField(
-        max_length=200,
+        max_length=MAX_LENGTH,
         verbose_name='единица измерения',
         help_text='Введите единицу измерения',
     )
@@ -104,7 +121,12 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveIntegerField(
         verbose_name='время приготовления',
-        help_text='Введите время приготовления в минутах'
+        help_text='Введите время приготовления в минутах',
+        default=5,
+        validators=[
+            MinValueValidator(MIN_COOK_TIME),
+            MaxValueValidator(MAX_COOK_TIME)
+        ]
     )
     image = models.ImageField(
         'Картинка',
@@ -276,16 +298,16 @@ class RecipeIngredient(models.Model):
 
 class ShortUrl(models.Model):
     recipe_id = models.PositiveIntegerField()
-    short_url = models.SlugField(max_length=64)
+    short_url = models.SlugField(max_length=MAX_LENGTH)
 
     @classmethod
     def generate(self):
-        return 's/' + ''.join(
+        return SHORT_URL_SPLIT + ''.join(
             random.choice(string.ascii_letters) for _ in range(
-                8
+                SHORT_URL_LENGTH
             )
         )
 
     @classmethod
     def find_slug(self, slug):
-        return 's/' + slug
+        return SHORT_URL_SPLIT + slug
