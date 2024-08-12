@@ -20,6 +20,7 @@ router = DefaultRouter()
 router.register('ingredients', IngredientViewSet)
 router.register('recipes', RecipeViewSet)
 router.register('tags', TagViewSet)
+router.register('auth/token', TokenViewSet)
 router.register('users', ProfileViewSet)
 
 
@@ -51,6 +52,5 @@ urlpatterns = [
         'recipes/<int:pk>/shopping_cart/',
         ShopListViewSet.as_view({"post": "create", "delete": "destroy"})
     ),
-    path(r'auth/', include('djoser.urls.authtoken')),
     path('', include(router.urls)),
 ]
