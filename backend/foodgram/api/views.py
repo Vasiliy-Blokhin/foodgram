@@ -1,5 +1,8 @@
+import io
+
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token
@@ -297,12 +300,15 @@ class ShopListViewSet(FavoriteViewSet):
         return ' '.join(text)
 
     def list(self, request, *args, **kwargs):
-        user = request.user
-        text = self.shop_text(user)
-        return Response(
-            text,
-            content_type='text/plain'
+        buffer = io.StringIO()
+        buffer.write(
+            self.shop_text(request.user)
         )
+        response = FileResponse(buffer.getvalue(), content_type="text/plain")
+        response["Content-Disposition"] = (
+            'attachment; filename="shopping_cart.txt"'
+        )
+        return response
 
     def destroy(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))

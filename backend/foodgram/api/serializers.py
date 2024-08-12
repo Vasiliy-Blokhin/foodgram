@@ -95,8 +95,7 @@ class TokenSerializer(serializers.ModelSerializer):
             email = request.data['email']
             user = self.get_user_email(self, email)
             if user.check_password(password):
-                token = Token.objects.get(user=user)
-                return token.key
+                return Token.objects.get(user=user)
 
     def create(self, validated_data):
         password = validated_data.get('password')
