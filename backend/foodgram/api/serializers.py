@@ -65,11 +65,6 @@ class SignupSerializer(serializers.ModelSerializer):
             'email', 'username', 'first_name', 'last_name', 'password'
         )
 
-    def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
-        user = User.objects.create_user(**validated_data)
-        return user
-
 
 class TokenSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -105,14 +100,12 @@ class TokenSerializer(serializers.ModelSerializer):
                 return Token.objects.get(user=user).key
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        if request.data.get('email') and request.data.get('password'):
-            user = self.get_user_email(
-                self,
-                request.data['email']
-            )
-            if user.check_password(request.data['password']):
-                return Token.objects.get_or_create(user=user)
+        user = self.get_user_email(
+            self,
+            validated_data.get('email')
+        )
+        if user.check_password(validated_data.get('password')):
+            return Token.objects.get_or_create(user=user)
 
 
 class PasswordSerializer(serializers.ModelSerializer):
