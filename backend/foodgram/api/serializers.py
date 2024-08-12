@@ -42,11 +42,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        if request and request.user.id:
-            return Follow.objects.filter(
-                author=obj, user=request.user
-            ).exists()
-        return False
+        is_user = request and request.user.id
+        return is_user and Follow.objects.filter(
+                author=obj,
+                user=request.user
+        ).exists()
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -203,12 +203,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
-        if request.user.id:
-            user = request.user
-            return RecipeShop.objects.filter(
-                recipe=obj, user=user
-            ).exists()
-        return False
+        return request.user.id and RecipeShop.objects.filter(
+                recipe=obj,
+                user=request.user
+        ).exists()
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')

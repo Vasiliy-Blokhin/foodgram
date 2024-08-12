@@ -38,6 +38,8 @@ from main.models import (
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-pub_date')
+    ordering_fields = ['pub_date']
+    ordering = ['-pub_date']
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
@@ -46,7 +48,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({
-            "request": self.request,
+            'request': self.request,
         })
         if self.kwargs.get('pk'):
             context.update({"id": self.kwargs.get('pk')})
@@ -180,7 +182,7 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         else:
             recipes_limit = None
         context.update({
-            "request": self.request,
+            'request': self.request,
             "recipes_limit": recipes_limit,
         })
         if self.kwargs.get('pk'):
@@ -269,7 +271,7 @@ class ShopListViewSet(FavoriteViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({
-            "request": self.request,
+            'request': self.request,
         })
         if self.kwargs.get('pk'):
             context.update({"pk": self.kwargs.get('pk')})
@@ -282,7 +284,7 @@ class ShopListViewSet(FavoriteViewSet):
             'ingredient__name',
             'ingredient__measurement_unit'
         ).annotate(count=Sum('amount'))
-        text = 'Корзина покупок:'
+        text = ['Корзина покупок:']
         for index, recipe_ingredient in enumerate(ingredient_list):
             name = recipe_ingredient.name
             measurement_unit = recipe_ingredient.measurement_unit
@@ -291,8 +293,8 @@ class ShopListViewSet(FavoriteViewSet):
                 f'\n{index}. {name} -'
                 f'{count} {measurement_unit}.'
             )
-            text.join(ingredient)
-        return text
+            text.append(ingredient)
+        return ' '.join(text)
 
     def list(self, request, *args, **kwargs):
         user = request.user
