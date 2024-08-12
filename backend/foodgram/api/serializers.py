@@ -98,13 +98,6 @@ class TokenSerializer(serializers.ModelSerializer):
             if user.check_password(request.data['password']):
                 return Token.objects.get(user=user).key
 
-    def create(self, validated_data):
-        user = self.get_user_email(
-            self,
-            validated_data.get('email')
-        )
-        return Token.objects.get_or_create(user=user)
-
 
 class PasswordSerializer(serializers.ModelSerializer):
     new_password = serializers.SerializerMethodField()
