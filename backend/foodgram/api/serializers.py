@@ -5,6 +5,7 @@ from django.core.validators import (
     MaxValueValidator,
     MinValueValidator
 )
+from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -42,11 +43,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        if request and request.user.id:
-            return Follow.objects.filter(
-                author=obj, user=request.user
-            ).exists()
-        return False
+        is_user = request and request.user.id
+        return is_user and Follow.objects.filter(
+                author=obj,
+                user=request.user
+        ).exists()
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -63,6 +64,11 @@ class SignupSerializer(serializers.ModelSerializer):
         fields = (
             'email', 'username', 'first_name', 'last_name', 'password'
         )
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        user = User.objects.create_user(**validated_data)
+        return user
 
 
 class TokenSerializer(serializers.ModelSerializer):
@@ -91,20 +97,20 @@ class TokenSerializer(serializers.ModelSerializer):
     def get_auth_token(self, obj):
         request = self.context.get('request')
         if request.data.get('email') and request.data.get('password'):
-            password = request.data['password']
-            email = request.data['email']
-            user = self.get_user_email(self, email)
-            if user.check_password(password):
-                token = Token.objects.get(user=user)
-                return token.key
+            user = self.get_user_email(
+                self,
+                request.data['email']
+            )
+            if user.check_password(request.data['password']):
+                return Token.objects.get(user=user).key
 
     def create(self, validated_data):
-        password = validated_data.get('password')
-        email = validated_data.get('email')
-        user = self.get_user_email(self, email)
-        if user.check_password(password):
-            token = Token.objects.get_or_create(user=user)
-            return token
+        user = self.get_user_email(
+            self,
+            validated_data.get('email')
+        )
+        if user.check_password(validated_data.get('password')):
+            return Token.objects.get_or_create(user=user)
 
 
 class PasswordSerializer(serializers.ModelSerializer):
@@ -203,12 +209,10 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
-        if request.user.id:
-            user = request.user
-            return RecipeShop.objects.filter(
-                recipe=obj, user=user
-            ).exists()
-        return False
+        return request.user.id and RecipeShop.objects.filter(
+                recipe=obj,
+                user=request.user
+        ).exists()
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
