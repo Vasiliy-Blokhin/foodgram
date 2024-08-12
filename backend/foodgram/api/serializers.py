@@ -4,8 +4,7 @@ from django.core.validators import (
     EmailValidator,
     MaxValueValidator,
     MinValueValidator
-)
-from django.contrib.auth.hashers import make_password
+)W
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -45,8 +44,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         is_user = request and request.user.id
         return is_user and Follow.objects.filter(
-                author=obj,
-                user=request.user
+            author=obj,
+            user=request.user
         ).exists()
 
 
@@ -205,8 +204,8 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         return request.user.id and RecipeShop.objects.filter(
-                recipe=obj,
-                user=request.user
+            recipe=obj,
+            user=request.user
         ).exists()
 
     def get_is_favorited(self, obj):
