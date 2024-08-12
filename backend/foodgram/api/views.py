@@ -24,6 +24,7 @@ from api.serializers import (
 )
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
+from api.permissions import IsAuthenticatedAndOwner
 from main.constants import RECIPE_URL, START_URL
 from main.models import (
     Follow,
@@ -267,7 +268,10 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get', 'post', 'delete', ], detail=True)
+@action(
+    methods=['get', 'post', 'delete', ],
+    permission_classes=(IsAuthenticatedAndOwner,),
+    detail=True)
 class ShopListViewSet(FavoriteViewSet):
     serializer_class = RecipeShopSerializer
 
