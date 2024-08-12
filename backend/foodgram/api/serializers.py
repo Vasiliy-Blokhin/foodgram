@@ -91,19 +91,20 @@ class TokenSerializer(serializers.ModelSerializer):
     def get_auth_token(self, obj):
         request = self.context.get('request')
         if request.data.get('email') and request.data.get('password'):
-            password = request.data['password']
-            email = request.data['email']
-            user = self.get_user_email(self, email)
-            if user.check_password(password):
-                return Token.objects.get(user=user)
+            user = self.get_user_email(
+                self,
+                request.data['email']
+            )
+            if user.check_password(request.data['password']):
+                return Token.objects.get(user=user).key
 
     def create(self, validated_data):
-        password = validated_data.get('password')
-        email = validated_data.get('email')
-        user = self.get_user_email(self, email)
-        if user.check_password(password):
-            token = Token.objects.get_or_create(user=user)
-            return token
+        user = self.get_user_email(
+            self,
+            validated_data.get('email')
+        )
+        if user.check_password(validated_data.get('password')):
+            return Token.objects.get_or_create(user=user)
 
 
 class PasswordSerializer(serializers.ModelSerializer):
