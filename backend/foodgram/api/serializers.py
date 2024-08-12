@@ -103,9 +103,7 @@ class TokenSerializer(serializers.ModelSerializer):
             self,
             validated_data.get('email')
         )
-        if user.check_password(validated_data.get('password')):
-            Token.objects.get_or_create(user=user)
-            return validated_data
+        return Token.objects.get_or_create(user=user)
 
 
 class PasswordSerializer(serializers.ModelSerializer):

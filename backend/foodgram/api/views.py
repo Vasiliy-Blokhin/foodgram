@@ -224,7 +224,7 @@ class TokenViewSet(viewsets.ModelViewSet):
             data=request.data, context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(validated_data=request.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
@@ -286,7 +286,7 @@ class ShopListViewSet(FavoriteViewSet):
 
     def shop_text(self, user):
         ingredient_list = RecipeIngredient.objects.filter(
-            recipe__recipe_shop__user=user
+            recipe__shopping_cart__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
