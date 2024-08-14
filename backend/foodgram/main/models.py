@@ -100,7 +100,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='recipes',
+        related_name='author',
         verbose_name='автор рецепта'
     )
     name = models.CharField(
@@ -252,7 +252,7 @@ class RecipeShop(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='пользователь',
-        related_name='recipe_shop'
+        related_name='recipe_author'
     )
 
     class Meta:
