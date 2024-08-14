@@ -138,12 +138,6 @@ class Recipe(models.Model):
         related_name='recipes_favorite',
         verbose_name='лайк рецепт'
     )
-    is_in_shopping_cart = models.ManyToManyField(
-        User,
-        through='RecipeShop',
-        related_name='recipe_shop',
-        verbose_name='рецепт в корзине'
-    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
@@ -226,7 +220,8 @@ class RecipeFavorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь'
+        verbose_name='пользователь',
+        related_name='recipe_favorite'
     )
 
     class Meta:
@@ -252,7 +247,7 @@ class RecipeShop(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='пользователь',
-        related_name='recipe_author'
+        related_name='recipe_shop'
     )
 
     class Meta:
