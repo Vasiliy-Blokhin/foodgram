@@ -250,9 +250,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action in ('create',):
-            return User.objects.all()
-        return self.request.user.recipe_favorite.filter(
-            recipe=Recipe.objects.get(id=self.kwargs.get('pk'))
+            return Recipe.objects.all()
+        return Recipe.recipe_favorite.filter(
+            user=self.request.user
         )
 
     def get_serializer_context(self):
