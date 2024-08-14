@@ -31,7 +31,7 @@ class User(AbstractUser):
     is_subscribed = models.ManyToManyField(
         'User',
         through='Follow',
-        related_name='author',
+        related_name='subscribe',
         verbose_name='подписка',
         blank=True
     )
