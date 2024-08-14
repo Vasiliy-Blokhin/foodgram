@@ -1,8 +1,5 @@
-import base64
-
 from drf_extra_fields.fields import Base64ImageField
 from django.core.exceptions import ValidationError
-from django.core.files.base import ContentFile
 from django.core.validators import (
     EmailValidator,
     MaxValueValidator,
