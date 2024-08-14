@@ -196,13 +196,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     is_in_shopping_cart = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
-    ingredients = serializers.SerializerMethodField()
+    ingredient = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         fields = (
             'id', 'name', 'text', 'cooking_time', 'image', 'author',
-            'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredients'
+            'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredient'
         )
 
     def get_is_in_shopping_cart(self, obj):
