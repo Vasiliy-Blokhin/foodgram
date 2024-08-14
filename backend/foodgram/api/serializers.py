@@ -9,6 +9,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from rest_framework.serializers import ModelSerializer
 
 from main.constants import (
     MAX_AMOUNT,
@@ -345,20 +346,21 @@ class SubscribeSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         return True
 
+    def get_recipes_count(self, obj):
+        return obj.recipes.count()
+
     def get_recipes(self, obj):
         request = self.context.get('request')
-        recipes_limit = self.context.get("recipes_limit")
-        recipes_list = Recipe.objects.filter(
-            author=obj
-        )
-        serializer = RecipeSerializer(
-            recipes_list, many=True, context={'request': request}
-        )
-        return serializer.data[:recipes_limit]
+        limit = request.GET.get('recipes_limit')
+        recipes = obj.recipes.all()
+        if limit:
+            recipes = recipes[:int(limit)]
+        serializer = RecipeShortSerializer(recipes, many=True, read_only=True)
+        return serializer.data
 
     def get_recipes_count(self, obj):
-        if self.context.get("pk"):
-            pk = int(self.context.get("pk"))
+        if self.context.get('pk'):
+            pk = int(self.context.get('pk'))
             author = User.objects.get(id=pk)
             return Recipe.objects.filter(
                 author=author
@@ -368,8 +370,8 @@ class SubscribeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
-        if self.context.get("pk"):
-            pk = int(self.context.get("pk"))
+        if self.context.get('pk'):
+            pk = int(self.context.get('pk'))
             author = get_object_or_404(User, id=pk)
             if not Follow.objects.filter(
                 author=author, user=user
@@ -397,3 +399,16 @@ class RecipeShopSerializer(serializers.ModelSerializer):
         recipe = get_object_or_404(Recipe, id=pk)
         RecipeShop.objects.create(recipe=recipe, user=user)
         return recipe
+
+
+class RecipeShortSerializer(ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'name',
+            'image',
+            'cooking_time'
+        )

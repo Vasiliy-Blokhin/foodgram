@@ -261,7 +261,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             'request': self.request,
         })
         if self.kwargs.get('pk'):
-            context.update({"pk": self.kwargs.get('pk')})
+            context.update({'pk': self.kwargs.get('pk')})
         return context
 
     def destroy(self, request, *args, **kwargs):
