@@ -287,6 +287,7 @@ class ShopListViewSet(FavoriteViewSet):
             context.update({'pk': self.kwargs.get('pk')})
         return context
 
+    @staticmethod
     def shop_text(self, user):
         ingredient_list = RecipeIngredient.objects.filter(
             recipe__recipe_shop__user=user
@@ -309,7 +310,7 @@ class ShopListViewSet(FavoriteViewSet):
     def list(self, request, *args, **kwargs):
         buffer = io.StringIO()
         buffer.write(
-            self.shop_text(request.user)
+            self.shop_text(self, request.user)
         )
         response = FileResponse(buffer.getvalue(), content_type='text/plain')
         response['Content-Disposition'] = (

@@ -215,12 +215,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        if request.user.id:
-            user = request.user
-            return RecipeFavorite.objects.filter(
-                recipe=obj, user=user
+        return request.user.id and RecipeFavorite.objects.filter(
+                recipe=obj, user=request.user
             ).exists()
-        return False
 
     def get_ingredients(self, obj):
         rec_ingrs = RecipeIngredient.objects.filter(
@@ -356,11 +353,10 @@ class SubscribeSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_recipes_count(self, obj):
+        request = self.context.get('request')
         if self.context.get('pk'):
-            pk = int(self.context.get('pk'))
-            author = User.objects.get(id=pk)
             return Recipe.objects.filter(
-                author=author
+                author=request.user
             ).count()
         return None
 
