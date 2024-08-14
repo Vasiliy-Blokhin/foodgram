@@ -1,5 +1,8 @@
+import base64
+
 from drf_extra_fields.fields import Base64ImageField
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.validators import (
     EmailValidator,
     MaxValueValidator,
@@ -190,6 +193,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     image = Base64ImageField()
     author = ProfileSerializer()
     tags = TagSerializer(many=True)
@@ -200,7 +204,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'name', 'text', 'cooking_time', 'image', 'author',
+            'id', 'name', 'text', 'cooking_time', 'image', 'author',
             'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredients'
         )
 
@@ -226,6 +230,18 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
         serializer = RecipeIngredientSerializer(rec_ingrs, many=True)
         return serializer.data
+
+    def create(self, validated_data):
+        return Recipe.objects.create(
+            author=User.objects.get(id=validated_data.get('author')),
+            name=validated_data.get('name'),
+            text=validated_data.get('text'),
+            cooking_time=validated_data.get('cooking_time'),
+            image=ContentFile(
+                base64.b64decode(validated_data.get('image')),
+                name=f"{validated_data.get('name')}.jpeg"
+            )
+        )
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
