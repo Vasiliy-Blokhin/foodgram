@@ -231,18 +231,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         serializer = RecipeIngredientSerializer(rec_ingrs, many=True)
         return serializer.data
 
-    def create(self, validated_data):
-        return Recipe.objects.create(
-            author=User.objects.get(id=validated_data.get('author')),
-            name=validated_data.get('name'),
-            text=validated_data.get('text'),
-            cooking_time=validated_data.get('cooking_time'),
-            image=ContentFile(
-                base64.b64decode(validated_data.get('image')),
-                name=f"{validated_data.get('name')}.jpeg"
-            )
-        )
-
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     tags = TagIdSerializer()
