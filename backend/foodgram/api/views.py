@@ -286,7 +286,7 @@ class ShopListViewSet(FavoriteViewSet):
 
     def shop_text(self, user):
         ingredient_list = RecipeIngredient.objects.filter(
-            recipe__is_in_shopping_cart__recipe_author=user
+            recipe__recipe_shop__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
