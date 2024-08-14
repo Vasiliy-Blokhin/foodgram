@@ -190,7 +190,6 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
     image = Base64ImageField()
     author = ProfileSerializer()
     tags = TagSerializer(many=True)
@@ -201,7 +200,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'id', 'name', 'text', 'cooking_time', 'image', 'author',
+            'name', 'text', 'cooking_time', 'image', 'author',
             'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredients'
         )
 
