@@ -187,10 +187,10 @@ class SubscribeViewSet(viewsets.ModelViewSet):
             recipes_limit = None
         context.update({
             'request': self.request,
-            "recipes_limit": recipes_limit,
+            'recipes_limit': recipes_limit,
         })
         if self.kwargs.get('pk'):
-            context.update({"pk": self.kwargs.get('pk')})
+            context.update({'pk': self.kwargs.get('pk')})
         return context
 
     def get_follow(self):
@@ -250,8 +250,8 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.action in ('create',):
-            return Recipe.objects.all()
-        return Recipe.recipe_favorite.filter(
+            return RecipeFavorite.objects.all()
+        return RecipeFavorite.filter(
             user=self.request.user
         )
 
@@ -284,7 +284,7 @@ class ShopListViewSet(FavoriteViewSet):
             'request': self.request,
         })
         if self.kwargs.get('pk'):
-            context.update({"pk": self.kwargs.get('pk')})
+            context.update({'pk': self.kwargs.get('pk')})
         return context
 
     def shop_text(self, user):
@@ -311,8 +311,8 @@ class ShopListViewSet(FavoriteViewSet):
         buffer.write(
             self.shop_text(request.user)
         )
-        response = FileResponse(buffer.getvalue(), content_type="text/plain")
-        response["Content-Disposition"] = (
+        response = FileResponse(buffer.getvalue(), content_type='text/plain')
+        response['Content-Disposition'] = (
             'attachment; filename="shopping_cart.txt"'
         )
         return response
