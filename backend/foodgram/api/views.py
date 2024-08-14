@@ -224,8 +224,11 @@ class TokenViewSet(viewsets.ModelViewSet):
             data=request.data, context={'request': request}
         )
         serializer.is_valid(raise_exception=True)
-        serializer.save(validated_data=request.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        token = serializer.save()
+        return Response(
+            {'auth_token': token.key},
+            status=status.HTTP_201_CREATED
+        )
 
     @action(
         methods=['post', ], detail=False, url_path='logout',
