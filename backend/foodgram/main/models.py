@@ -31,7 +31,7 @@ class User(AbstractUser):
     is_subscribed = models.ManyToManyField(
         'User',
         through='Follow',
-        related_name='subscribe',
+        related_name='author',
         verbose_name='подписка',
         blank=True
     )
@@ -100,7 +100,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='author',
+        related_name='recipes',
         verbose_name='автор рецепта'
     )
     name = models.CharField(
@@ -137,6 +137,12 @@ class Recipe(models.Model):
         through='RecipeFavorite',
         related_name='recipes_favorite',
         verbose_name='лайк рецепт'
+    )
+    is_in_shopping_cart = models.ManyToManyField(
+        User,
+        through='RecipeShop',
+        related_name='recipe_shop',
+        verbose_name='рецепт в корзине'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -220,8 +226,7 @@ class RecipeFavorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь',
-        related_name='recipe_favorite'
+        verbose_name='пользователь'
     )
 
     class Meta:
@@ -246,8 +251,7 @@ class RecipeShop(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь',
-        related_name='recipe_shop'
+        verbose_name='пользователь'
     )
 
     class Meta:
