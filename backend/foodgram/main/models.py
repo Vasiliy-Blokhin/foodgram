@@ -251,7 +251,8 @@ class RecipeShop(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь'
+        verbose_name='пользователь',
+        related_name='recipe_shop'
     )
 
     class Meta:
