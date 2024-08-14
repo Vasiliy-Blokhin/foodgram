@@ -196,13 +196,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     is_in_shopping_cart = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
-    ingredient = serializers.SerializerMethodField()
+    ingredients = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         fields = (
             'id', 'name', 'text', 'cooking_time', 'image', 'author',
-            'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredient'
+            'tags', 'is_in_shopping_cart', 'is_favorited', 'ingredients'
         )
 
     def get_is_in_shopping_cart(self, obj):
@@ -265,7 +265,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             [RecipeIngredient(
                 recipe=recipe,
                 amount=int(ingredient['amount']),
-                ingredient=ingredient['id']
+                ingredient=Ingredient.objects.get(id=ingredient['id'])
             ) for ingredient in ingredients]
         )
 
