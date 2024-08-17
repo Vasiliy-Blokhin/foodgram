@@ -297,9 +297,9 @@ class ShopListViewSet(FavoriteViewSet):
         ).annotate(count=Sum('amount'))
         text = ['Корзина покупок:']
         for index, recipe_ingredient in enumerate(ingredient_list):
-            name = recipe_ingredient.name
-            measurement_unit = recipe_ingredient.measurement_unit
-            count = recipe_ingredient.count
+            name = recipe_ingredient.recipe.name
+            measurement_unit = recipe_ingredient.ingredient.measurement_unit
+            count = recipe_ingredient.amount
             ingredient = (
                 f'\n{index}. {name} -'
                 f'{count} {measurement_unit}.'
