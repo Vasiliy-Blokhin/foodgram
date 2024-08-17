@@ -241,12 +241,14 @@ class RecipeShop(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
-        related_name='recipe_shop'
+        related_name='recipe_shop',
+        default=False
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь'
+        verbose_name='пользователь',
+        default=False
     )
 
     class Meta:
