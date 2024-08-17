@@ -266,7 +266,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 @action(methods=['get', ], detail=False)
 class FavoriteListViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
+    # queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
     def get_serializer_context(self):
@@ -277,6 +277,9 @@ class FavoriteListViewSet(viewsets.ModelViewSet):
         if self.kwargs.get('pk'):
             context.update({'pk': self.kwargs.get('pk')})
         return context
+
+    def get_queryset(self, request):
+        return Recipe.objects.all().filter(is_favorited__user=request.user)
 
     def list(self, request):
         return Response(
