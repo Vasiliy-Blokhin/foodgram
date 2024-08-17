@@ -45,10 +45,6 @@ urlpatterns = [
         })
     ),
     path(
-        'favorites/',
-        ShopListViewSet.as_view({"get": "list", })
-    ),
-    path(
         'recipes/download_shopping_cart/',
         ShopListViewSet.as_view({"get": "list", })
     ),

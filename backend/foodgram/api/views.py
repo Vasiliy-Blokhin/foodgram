@@ -277,12 +277,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             context.update({'pk': self.kwargs.get('pk')})
         return context
 
-    def list(self, request):
-        return Response(
-            status=status.HTTP_200_OK,
-            data=self.queryset.filter(is_favorited__user=request.user)
-        )
-
     def destroy(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))
         user = self.request.user
