@@ -1,4 +1,6 @@
 import io
+import logging
+import sys
 
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
@@ -39,6 +41,16 @@ from main.models import (
 )
 
 
+handler = logging.StreamHandler(sys.stdout)
+formater = logging.Formatter(
+    '%(name)s, %(funcName)s, %(asctime)s, %(levelname)s - %(message)s.'
+)
+handler.setFormatter(formater)
+logger = logging.getLogger(name=__name__)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+
+
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-pub_date')
@@ -69,6 +81,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             # token = Token.objects.filter(
             #     key=key[1]
             # ).first()
+            logger.info(self.request.user)
             return get_list_or_404(
                 Recipe, is_favorited__user__username=self.request.user
             )
