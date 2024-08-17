@@ -329,6 +329,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     email = serializers.EmailField(read_only=True)
     username = serializers.CharField(read_only=True)
+    avatar = Base64ImageField(read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
     recipes = serializers.SerializerMethodField(read_only=True)
     recipes_count = serializers.SerializerMethodField(read_only=True)
@@ -337,7 +338,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             'id', 'email', 'username', 'first_name', 'last_name',
-            'is_subscribed', 'recipes', 'recipes_count'
+            'is_subscribed', 'recipes', 'recipes_count', 'avatar'
         )
         depth = 2
 
