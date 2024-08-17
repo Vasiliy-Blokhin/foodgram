@@ -1,6 +1,4 @@
 import io
-import logging
-import sys
 
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
@@ -39,17 +37,6 @@ from main.models import (
     Tag,
     User
 )
-
-
-handler = logging.StreamHandler(sys.stdout)
-formater = logging.Formatter(
-    '%(name)s, %(funcName)s, %(asctime)s, %(levelname)s - %(message)s.'
-)
-handler.setFormatter(formater)
-
-logger = logging.getLogger(name=__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
 
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
@@ -138,7 +125,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend, ]
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, request):
         if self.action in ('create',):
             return SignupSerializer
         return ProfileSerializer
@@ -302,9 +289,7 @@ class ShopListViewSet(FavoriteViewSet):
             'ingredient__measurement_unit'
         ).annotate(count=Sum('amount'))
         text = ['Корзина покупок:']
-        logger.error(ingredient_list)
         for index, recipe_ingredient in enumerate(ingredient_list):
-            logger.error(recipe_ingredient)
             name = recipe_ingredient.ingredient__name
             measurement_unit = recipe_ingredient.ingredient__measurement_unit
             count = recipe_ingredient.count
