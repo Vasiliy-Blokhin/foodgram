@@ -256,7 +256,7 @@ class TokenViewSet(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get', 'post', 'delete', ], detail=True)
+@action(methods=['post', 'delete', ], detail=True)
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = FavoriteSerializer
