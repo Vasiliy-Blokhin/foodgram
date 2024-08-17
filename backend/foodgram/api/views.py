@@ -279,7 +279,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     methods=['get', 'post', 'delete', ],
     permission_classes=(IsAuthenticatedAndOwner,),
     detail=True)
-class ShopListViewSet(FavoriteViewSet):
+class ShopListViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeShopSerializer
 
     def get_serializer_context(self):
