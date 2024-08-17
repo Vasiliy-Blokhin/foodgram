@@ -317,6 +317,20 @@ class ShopListViewSet(viewsets.ModelViewSet):
             text.append(ingredient)
         return ' '.join(text)
 
+    def create(self, request, pk, *args, **kwargs):
+        
+        if RecipeShop.objects.filter(
+            user=self.request.user, recipe__id=pk
+        ).exists():
+            return Response(
+                {'errors': 'Рецепт уже добавлен!'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        recipe = get_object_or_404(Recipe, id=pk)
+        RecipeShop.objects.create(user=self.request.user, recipe=recipe)
+        serializer = RecipeShopSerializer(recipe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def list(self, request, *args, **kwargs):
         buffer = io.StringIO()
         buffer.write(
