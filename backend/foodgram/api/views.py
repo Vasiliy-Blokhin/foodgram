@@ -45,7 +45,7 @@ from main.models import (
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().order_by('-pub_date')
     ordering_fields = ['pub_date']
     ordering = ['-pub_date']
     serializer_class = RecipeSerializer
