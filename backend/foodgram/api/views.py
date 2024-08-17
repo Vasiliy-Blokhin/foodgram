@@ -74,7 +74,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     User,
                     username=self.request.user
                 )
-            )
+            ).order_by('-pub_date')
+        return Recipe.objects.all().order_by('-pub_date')
 
     @action(
         methods=('GET',),
