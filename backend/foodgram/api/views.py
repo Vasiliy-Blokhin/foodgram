@@ -27,7 +27,11 @@ from api.serializers import (
 from api.filter import IngredientSearchFilter, RecipeFilter
 from api.pagination import PagePagination
 from api.permissions import IsAuthenticatedAndOwner
-from main.constants import RECIPE_URL, START_URL
+from main.constants import (
+    CONTENT_DISPOSITION,
+    RECIPE_URL,
+    START_URL
+)
 from main.models import (
     Follow,
     Ingredient,
@@ -41,19 +45,9 @@ from main.models import (
 )
 
 
-handler = logging.StreamHandler(sys.stdout)
-formater = logging.Formatter(
-    '%(name)s, %(funcName)s, %(asctime)s, %(levelname)s - %(message)s.'
-)
-handler.setFormatter(formater)
-logger = logging.getLogger(name=__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
-
-
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all().order_by('-pub_date')
+    queryset = Recipe.objects.all()
     ordering_fields = ['pub_date']
     ordering = ['-pub_date']
     serializer_class = RecipeSerializer
@@ -67,7 +61,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'request': self.request,
         })
         if self.kwargs.get('pk'):
-            context.update({"id": self.kwargs.get('pk')})
+            context.update({'id': self.kwargs.get('pk')})
         return context
 
     def get_serializer_class(self):
@@ -77,13 +71,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.GET.get('is_favorited'):
-            # key = str(self.request.headers['Authorization']).split(' ')
-            # token = Token.objects.filter(
-            #     key=key[1]
-            # ).first()
-            logger.info(self.request.user)
-            user = get_object_or_404(User, username=self.request.user)
-            return Recipe.objects.filter(is_favorited=user)
+            return Recipe.objects.filter(
+                is_favorited=get_object_or_404(
+                    User,
+                    username=self.request.user
+                )
+            )
 
     @action(
         methods=('GET',),
@@ -332,7 +325,7 @@ class ShopListViewSet(viewsets.ModelViewSet):
         )
         response = FileResponse(buffer.getvalue(), content_type='text/plain')
         response['Content-Disposition'] = (
-            'attachment; filename="shopping_cart.txt"'
+            CONTENT_DISPOSITION
         )
         return response
 

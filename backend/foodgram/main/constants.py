@@ -12,3 +12,5 @@ MAX_COOK_TIME = 1000
 
 MIN_AMOUNT = 1
 MAX_AMOUNT = 100000
+
+CONTENT_DISPOSITION = 'attachment; filename="shopping_cart.txt"'

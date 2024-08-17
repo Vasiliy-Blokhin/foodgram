@@ -13,6 +13,7 @@ from rest_framework.serializers import ModelSerializer
 
 from main.constants import (
     MAX_AMOUNT,
+    MAX_LENGTH,
     MIN_AMOUNT
 )
 from main.models import (
@@ -54,10 +55,10 @@ class SignupSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=(EmailValidator,)
     )
-    username = serializers.CharField(max_length=150)
-    first_name = serializers.CharField(max_length=150)
-    last_name = serializers.CharField(max_length=150)
-    password = serializers.CharField(max_length=150, write_only=True)
+    username = serializers.CharField(max_length=MAX_LENGTH)
+    first_name = serializers.CharField(max_length=MAX_LENGTH)
+    last_name = serializers.CharField(max_length=MAX_LENGTH)
+    password = serializers.CharField(max_length=MAX_LENGTH, write_only=True)
 
     class Meta:
         model = User
@@ -316,7 +317,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        pk = int(self.context.get("pk"))
+        pk = int(self.context.get('pk'))
         recipe = get_object_or_404(Recipe, id=pk)
         user = request.user
         RecipeFavorite.objects.get_or_create(
@@ -390,7 +391,7 @@ class RecipeShopSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
-        pk = int(self.context.get("pk"))
+        pk = int(self.context.get('pk'))
         recipe = get_object_or_404(Recipe, id=pk)
         RecipeShop.objects.create(recipe=recipe, user=user)
         return recipe

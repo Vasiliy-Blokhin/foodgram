@@ -31,26 +31,32 @@ urlpatterns = [
     ),
     path(
         'users/<int:pk>/subscribe/',
-        SubscribeViewSet.as_view({"post": "create", "delete": "destroy"})
+        SubscribeViewSet.as_view({
+                'post': 'create',
+                'delete': 'destroy'
+        })
     ),
     path(
         'users/subscriptions/',
-        SubscribeViewSet.as_view({"get": "list", })
+        SubscribeViewSet.as_view({'get': 'list', })
     ),
     path(
         'recipes/<int:pk>/favorite/',
         FavoriteViewSet.as_view({
-            "post": "create",
-            "delete": "destroy"
+            'post': 'create',
+            'delete': 'destroy'
         })
     ),
     path(
         'recipes/download_shopping_cart/',
-        ShopListViewSet.as_view({"get": "list", })
+        ShopListViewSet.as_view({'get': 'list', })
     ),
     path(
         'recipes/<int:pk>/shopping_cart/',
-        ShopListViewSet.as_view({"post": "create", "delete": "destroy"})
+        ShopListViewSet.as_view({
+            'post': 'create',
+            'delete': 'destroy'
+        })
     ),
     path('', include(router.urls)),
 ]
