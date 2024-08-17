@@ -264,30 +264,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['get', ], detail=False)
-class FavoriteListViewSet(viewsets.ModelViewSet):
-    # queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({
-            'request': self.request,
-        })
-        if self.kwargs.get('pk'):
-            context.update({'pk': self.kwargs.get('pk')})
-        return context
-
-    def get_queryset(self, request):
-        return Recipe.objects.all().filter(is_favorited__user=request.user)
-
-    def list(self, request):
-        return Response(
-            data=get_list_or_404(Recipe, is_favorited__user=request.user),
-            status=status.HTTP_200_OK
-        )
-
-
 @action(
     methods=['get', 'post', 'delete', ],
     permission_classes=(IsAuthenticatedAndOwner,),

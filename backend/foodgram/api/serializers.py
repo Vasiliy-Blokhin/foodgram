@@ -6,7 +6,7 @@ from django.core.validators import (
     MinValueValidator
 )
 from django.db import transaction
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.serializers import ModelSerializer
@@ -226,6 +226,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
         serializer = RecipeIngredientSerializer(rec_ingrs, many=True)
         return serializer.data
+
+    def get_value(self, dictionary):
+        user = self.context['request']['user']
+        if self.is_favorited:
+            return get_list_or_404(Recipe, is_favorited__user=user)
+        return get_list_or_404(Recipe)
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):

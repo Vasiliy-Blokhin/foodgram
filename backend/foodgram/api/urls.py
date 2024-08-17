@@ -10,8 +10,7 @@ from api.views import (
     ShopListViewSet,
     SubscribeViewSet,
     TagViewSet,
-    TokenViewSet,
-    FavoriteListViewSet
+    TokenViewSet
 )
 from main.constants import SHORT_URL_SPLIT
 
@@ -43,12 +42,6 @@ urlpatterns = [
         FavoriteViewSet.as_view({
             "post": "create",
             "delete": "destroy"
-        })
-    ),
-    path(
-        'favorites/',
-        FavoriteListViewSet.as_view({
-            "get": "list",
         })
     ),
     path(
