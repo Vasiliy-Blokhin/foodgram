@@ -318,7 +318,6 @@ class ShopListViewSet(viewsets.ModelViewSet):
         return ' '.join(text)
 
     def create(self, request, pk, *args, **kwargs):
-        
         if RecipeShop.objects.filter(
             user=self.request.user, recipe__id=pk
         ).exists():
