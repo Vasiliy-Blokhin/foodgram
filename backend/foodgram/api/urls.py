@@ -30,11 +30,11 @@ urlpatterns = [
         RedirectShortUrl
     ),
     path(
-        'user/<int:pk>/subscribe/',
+        'users/<int:pk>/subscribe/',
         SubscribeViewSet.as_view({"post": "create", "delete": "destroy"})
     ),
     path(
-        'user/subscriptions/',
+        'users/subscriptions/',
         SubscribeViewSet.as_view({"get": "list", })
     ),
     path(
