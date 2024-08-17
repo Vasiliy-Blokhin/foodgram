@@ -5,7 +5,7 @@ import sys
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import FileResponse
-from django.shortcuts import get_object_or_404, redirect, get_list_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
