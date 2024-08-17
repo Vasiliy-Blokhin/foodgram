@@ -393,16 +393,3 @@ class RecipeShopSerializer(serializers.ModelSerializer):
         recipe = get_object_or_404(Recipe, id=pk)
         RecipeShop.objects.create(recipe=recipe, user=user)
         return recipe
-
-
-class RecipeShortSerializer(ModelSerializer):
-    image = Base64ImageField()
-
-    class Meta:
-        model = Recipe
-        fields = (
-            'id',
-            'name',
-            'image',
-            'cooking_time'
-        )

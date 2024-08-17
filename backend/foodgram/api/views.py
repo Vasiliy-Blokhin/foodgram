@@ -257,6 +257,17 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             context.update({'pk': self.kwargs.get('pk')})
         return context
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return RecipeSerializer
+        return FavoriteSerializer
+
+    def list(self, request):
+        return Response(
+            data=Recipe.filter(is_favorited__user=request.user),
+            status=status.HTTP_200_OK
+        )
+
     def destroy(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))
         user = self.request.user
@@ -290,9 +301,9 @@ class ShopListViewSet(FavoriteViewSet):
         ).annotate(count=Sum('amount'))
         text = ['Корзина покупок:']
         for index, recipe_ingredient in enumerate(ingredient_list):
-            name = recipe_ingredient.ingredient__name
-            measurement_unit = recipe_ingredient.ingredient__measurement_unit
-            count = recipe_ingredient.count
+            name = recipe_ingredient['ingredient__name']
+            measurement_unit = recipe_ingredient['ingredient__measurement_unit']
+            count = recipe_ingredient['count']
             ingredient = (
                 f'\n{index}. {name} -'
                 f'{count} {measurement_unit}.'
