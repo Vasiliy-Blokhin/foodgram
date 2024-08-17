@@ -259,7 +259,7 @@ class TokenViewSet(viewsets.ModelViewSet):
 @action(methods=['get', 'post', 'delete', ], detail=True)
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
+    serializer_class = FavoriteSerializer
 
     def get_queryset(self):
         if self.action in ('create',):
