@@ -227,12 +227,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         serializer = RecipeIngredientSerializer(rec_ingrs, many=True)
         return serializer.data
 
-    def get_value(self, dictionary):
-        user = self.context['request']['user']
-        if self.is_favorited:
-            return get_list_or_404(Recipe, is_favorited__user=user)
-        return get_list_or_404(Recipe)
-
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     tags = TagIdSerializer()
