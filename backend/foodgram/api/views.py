@@ -67,7 +67,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.request.GET.get('is_favorited'):
             token = Token.objects.filter(
                 key=self.request.headers['Authorization']
-            )
+            ).first()
             return get_list_or_404(
                 Recipe, is_favorited__user=token.user
             )
