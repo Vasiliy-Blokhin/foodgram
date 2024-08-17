@@ -261,13 +261,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = FavoriteSerializer
 
-    def get_queryset(self):
-        if self.action in ('create',):
-            return RecipeFavorite.objects.all()
-        return RecipeFavorite.filter(
-            user=self.request.user
-        )
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({
