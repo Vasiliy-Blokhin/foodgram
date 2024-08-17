@@ -6,7 +6,7 @@ from django.core.validators import (
     MinValueValidator
 )
 from django.db import transaction
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.serializers import ModelSerializer
