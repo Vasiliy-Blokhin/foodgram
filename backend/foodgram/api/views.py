@@ -1,6 +1,4 @@
 import io
-import logging
-import sys
 
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
