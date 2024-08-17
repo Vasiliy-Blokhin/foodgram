@@ -70,7 +70,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             #     key=key[1]
             # ).first()
             return get_list_or_404(
-                Recipe, is_favorited__user__username=self.request.USER
+                Recipe, is_favorited__user__username=self.request.user
             )
 
     @action(
