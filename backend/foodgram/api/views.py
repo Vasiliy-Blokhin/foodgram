@@ -63,10 +63,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeCreateSerializer
         return RecipeSerializer
 
-    def get_queryset(self):
-        if self.request.GET.get('is_favorited'):
+    def get_queryset(self, request):
+        if request.GET.get('is_favorited'):
             return get_list_or_404(
-                Recipe, is_favorited__user=self.request.user
+                Recipe, is_favorited__user=request.user
             )
 
     @action(
