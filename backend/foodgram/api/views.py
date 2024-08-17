@@ -58,7 +58,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             context.update({"id": self.kwargs.get('pk')})
         return context
 
-    def get_serializer_class(self, request):
+    def get_serializer_class(self):
         if self.action in ('create', 'partial_update'):
             return RecipeCreateSerializer
         return RecipeSerializer
@@ -125,7 +125,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend, ]
 
-    def get_serializer_class(self, request):
+    def get_serializer_class(self):
         if self.action in ('create',):
             return SignupSerializer
         return ProfileSerializer
