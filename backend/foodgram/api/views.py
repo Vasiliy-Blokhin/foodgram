@@ -71,7 +71,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             context.update({"id": self.kwargs.get('pk')})
         return context
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, request):
         if self.action in ('create', 'partial_update'):
             return RecipeCreateSerializer
         return RecipeSerializer
