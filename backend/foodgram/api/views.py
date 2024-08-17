@@ -296,7 +296,9 @@ class ShopListViewSet(FavoriteViewSet):
             'ingredient__measurement_unit'
         ).annotate(count=Sum('amount'))
         text = ['Корзина покупок:']
+        print(ingredient_list)
         for index, recipe_ingredient in enumerate(ingredient_list):
+            print(recipe_ingredient)
             name = recipe_ingredient.recipe.name
             measurement_unit = recipe_ingredient.ingredient.measurement_unit
             count = recipe_ingredient.amount
