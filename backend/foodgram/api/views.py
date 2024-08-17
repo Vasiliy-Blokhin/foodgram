@@ -256,10 +256,9 @@ class TokenViewSet(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=['post', 'delete', ], detail=True)
+@action(methods=['get', 'post', 'delete', ], detail=True)
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = FavoriteSerializer
 
     def get_queryset(self):
         if self.action in ('create',):
@@ -267,6 +266,11 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return RecipeFavorite.filter(
             user=self.request.user
         )
+
+    def get_serializer_class(self, request):
+        if request.method == 'GET':
+            return RecipeSerializer
+        return FavoriteSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -276,6 +280,12 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         if self.kwargs.get('pk'):
             context.update({'pk': self.kwargs.get('pk')})
         return context
+
+    def list(self, request):
+        return Response(
+            status=status.HTTP_200_OK,
+            data=self.queryset.filter(is_favorited__user=request.user)
+        )
 
     def destroy(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))
@@ -312,9 +322,9 @@ class ShopListViewSet(FavoriteViewSet):
         logger.error(ingredient_list)
         for index, recipe_ingredient in enumerate(ingredient_list):
             logger.error(recipe_ingredient)
-            name = recipe_ingredient.recipe.name
-            measurement_unit = recipe_ingredient.ingredient.measurement_unit
-            count = recipe_ingredient.amount
+            name = recipe_ingredient.ingredient__name
+            measurement_unit = recipe_ingredient.ingredient__measurement_unit
+            count = recipe_ingredient.count
             ingredient = (
                 f'\n{index}. {name} -'
                 f'{count} {measurement_unit}.'
