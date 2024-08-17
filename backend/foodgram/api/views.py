@@ -259,6 +259,7 @@ class TokenViewSet(viewsets.ModelViewSet):
 @action(methods=['get', 'post', 'delete', ], detail=True)
 class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
 
     def get_queryset(self):
         if self.action in ('create',):
@@ -267,7 +268,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             user=self.request.user
         )
 
-    def get_serializer(self, request):
+    def get_serializer_class(self, request):
         if request.method == 'GET':
             return RecipeSerializer
         return FavoriteSerializer
