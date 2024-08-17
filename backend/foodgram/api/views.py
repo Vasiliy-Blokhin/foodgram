@@ -3,7 +3,7 @@ import io
 from django.db.models import Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import FileResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, get_list_or_404
 from rest_framework import permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
@@ -257,17 +257,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             context.update({'pk': self.kwargs.get('pk')})
         return context
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return RecipeSerializer
-        return FavoriteSerializer
-
-    def list(self, request):
-        return Response(
-            data=Recipe.filter(is_favorited__user=request.user),
-            status=status.HTTP_200_OK
-        )
-
     def destroy(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))
         user = self.request.user
@@ -275,11 +264,33 @@ class FavoriteViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@action(methods=['get', ], detail=False)
+class FavoriteListViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({
+            'request': self.request,
+        })
+        if self.kwargs.get('pk'):
+            context.update({'pk': self.kwargs.get('pk')})
+        return context
+
+    def list(self, request):
+        return Response(
+            data=get_list_or_404(Recipe, is_favorited__user=request.user),
+            status=status.HTTP_200_OK
+        )
+
+
 @action(
     methods=['get', 'post', 'delete', ],
     permission_classes=(IsAuthenticatedAndOwner,),
     detail=True)
 class ShopListViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
     serializer_class = RecipeShopSerializer
 
     def get_serializer_context(self):
@@ -307,7 +318,7 @@ class ShopListViewSet(viewsets.ModelViewSet):
             ]
             count = recipe_ingredient['count']
             ingredient = (
-                f'\n{index}. {name} -'
+                f'\n{index + 1}. {name} -'
                 f'{count} {measurement_unit}.'
             )
             text.append(ingredient)
