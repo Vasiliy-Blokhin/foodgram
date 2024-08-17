@@ -267,7 +267,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             user=self.request.user
         )
 
-    def get_serializer_class(self, request):
+    def get_serializer(self, request):
         if request.method == 'GET':
             return RecipeSerializer
         return FavoriteSerializer
