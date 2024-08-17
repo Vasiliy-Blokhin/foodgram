@@ -302,7 +302,9 @@ class ShopListViewSet(FavoriteViewSet):
         text = ['Корзина покупок:']
         for index, recipe_ingredient in enumerate(ingredient_list):
             name = recipe_ingredient['ingredient__name']
-            measurement_unit = recipe_ingredient['ingredient__measurement_unit']
+            measurement_unit = recipe_ingredient[
+                'ingredient__measurement_unit'
+            ]
             count = recipe_ingredient['count']
             ingredient = (
                 f'\n{index}. {name} -'
