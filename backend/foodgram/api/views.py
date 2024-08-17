@@ -83,7 +83,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             # ).first()
             logger.info(self.request.user)
             user = get_object_or_404(User, username=self.request.user)
-            return get_list_or_404(Recipe, is_favorited=user)
+            return Recipe.objects.filter(is_favorited=user)
 
     @action(
         methods=('GET',),
