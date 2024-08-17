@@ -72,7 +72,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return get_list_or_404(
                 Recipe, is_favorited__user=token.user
             )
-        
 
     @action(
         methods=('GET',),
