@@ -32,8 +32,8 @@ urlpatterns = [
     path(
         'users/<int:pk>/subscribe/',
         SubscribeViewSet.as_view({
-                'post': 'create',
-                'delete': 'destroy'
+            'post': 'create',
+            'delete': 'destroy'
         })
     ),
     path(
