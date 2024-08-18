@@ -170,7 +170,7 @@ function App() {
         is_in_shopping_cart: Number(true),
       })
       .then((res) => {
-        const { count } = 0;
+        const { count } = res;
         setOrders(count);
       });
   };
