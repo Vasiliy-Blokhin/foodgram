@@ -45,9 +45,7 @@ from main.models import (
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all().order_by('-pub_date')
-    ordering_fields = ['pub_date']
-    ordering = ['-pub_date']
+    queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
@@ -74,15 +72,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     User,
                     username=self.request.user
                 )
-            ).order_by('-pub_date')
+            )
         elif self.request.GET.get('is_in_shopping_cart'):
             return Recipe.objects.filter(
                 is_in_shopping_cart=get_object_or_404(
                     User,
                     username=self.request.user
                 )
-            ).order_by('-pub_date')
-        return Recipe.objects.all().order_by('-pub_date')
+            )
+        return Recipe.objects.all()
 
     @action(
         methods=('GET',),
@@ -231,7 +229,6 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@action(methods=[], detail=False)
 class TokenViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = TokenSerializer
@@ -303,7 +300,7 @@ class ShopListViewSet(viewsets.ModelViewSet):
         return context
 
     @staticmethod
-    def shop_text(self, user):
+    def shop_text(user):
         ingredient_list = RecipeIngredient.objects.filter(
             recipe__recipe_shop__user=user
         ).values(
@@ -322,7 +319,19 @@ class ShopListViewSet(viewsets.ModelViewSet):
                 f'{count} {measurement_unit}.'
             )
             text.append(ingredient)
-        return ' '.join(text)
+
+    def create(self, request, pk, *args, **kwargs):
+        if RecipeShop.objects.filter(
+            user=self.request.user, recipe__id=pk
+        ).exists():
+            return Response(
+                {'errors': 'Рецепт уже добавлен!'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        recipe = get_object_or_404(Recipe, id=pk)
+        RecipeShop.objects.create(user=self.request.user, recipe=recipe)
+        serializer = RecipeShopSerializer(recipe)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
         buffer = io.StringIO()
