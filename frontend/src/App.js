@@ -165,6 +165,7 @@ function App() {
 
   const getOrders = () => {
     api
+    count = 0
       .getRecipes({
         page: 1,
         is_in_shopping_cart: Number(true),
