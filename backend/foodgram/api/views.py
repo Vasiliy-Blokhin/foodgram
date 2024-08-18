@@ -45,9 +45,7 @@ from main.models import (
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all().order_by('-pub_date')
-    ordering_fields = ['pub_date']
-    ordering = ['-pub_date']
+    queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
@@ -302,7 +300,7 @@ class ShopListViewSet(viewsets.ModelViewSet):
         return context
 
     @staticmethod
-    def shop_text(self, user):
+    def shop_text(user):
         ingredient_list = RecipeIngredient.objects.filter(
             recipe__recipe_shop__user=user
         ).values(
