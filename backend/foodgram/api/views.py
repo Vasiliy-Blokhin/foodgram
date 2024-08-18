@@ -45,7 +45,9 @@ from main.models import (
 
 @action(methods=['get', 'post', 'patch', 'delete'], detail=True)
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.all().order_by('-pub_date')
+    ordering_fields = ['pub_date']
+    ordering = ['-pub_date']
     serializer_class = RecipeSerializer
     filter_backends = [DjangoFilterBackend, ]
     filter_class = RecipeFilter
@@ -72,15 +74,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     User,
                     username=self.request.user
                 )
-            )
+            ).order_by('-pub_date')
         elif self.request.GET.get('is_in_shopping_cart'):
             return Recipe.objects.filter(
                 is_in_shopping_cart=get_object_or_404(
                     User,
                     username=self.request.user
                 )
-            )
-        return Recipe.objects.all()
+            ).order_by('-pub_date')
+        return Recipe.objects.all().order_by('-pub_date')
 
     @action(
         methods=('GET',),
@@ -229,6 +231,7 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@action(methods=[], detail=False)
 class TokenViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = TokenSerializer
