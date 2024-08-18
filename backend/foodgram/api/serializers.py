@@ -88,7 +88,7 @@ class TokenSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def get_user_email(email):
+    def get_user_email(self, email):
         return get_object_or_404(
             User, email=email
         )
