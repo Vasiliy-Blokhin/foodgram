@@ -138,7 +138,10 @@ class Recipe(models.Model):
         related_name='recipes_favorite',
         verbose_name='лайк рецепт'
     )
-    is_in_shopping_cart = models.BooleanField(
+    is_in_shopping_cart = models.ManyToManyField(
+        User,
+        through='RecipeShop',
+        related_name='recipe_shop',
         verbose_name='рецепт в корзине',
         default=False
     )
