@@ -139,7 +139,6 @@ class Recipe(models.Model):
         verbose_name='лайк рецепт'
     )
     is_in_shopping_cart = models.BooleanField(
-        related_name='recipe_shop',
         verbose_name='рецепт в корзине',
         default=False
     )
