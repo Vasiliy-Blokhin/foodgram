@@ -75,6 +75,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     username=self.request.user
                 )
             ).order_by('-pub_date')
+        elif self.request.GET.get('is_in_shopping_cart'):
+            return Recipe.objects.filter(
+                is_in_shopping_cart=get_object_or_404(
+                    User,
+                    username=self.request.user
+                )
+            ).order_by('-pub_date')
         return Recipe.objects.all().order_by('-pub_date')
 
     @action(
