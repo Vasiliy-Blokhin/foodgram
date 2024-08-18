@@ -138,6 +138,11 @@ class Recipe(models.Model):
         related_name='recipes_favorite',
         verbose_name='лайк рецепт'
     )
+    is_in_shopping_cart = models.BooleanField(
+        related_name='recipe_shop',
+        verbose_name='рецепт в корзине',
+        default=False
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
@@ -241,14 +246,12 @@ class RecipeShop(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
-        related_name='recipe_shop',
-        default=False
+        related_name='recipe_shop'
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='пользователь',
-        default=False
+        verbose_name='пользователь'
     )
 
     class Meta:
