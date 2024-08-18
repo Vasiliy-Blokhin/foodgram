@@ -142,8 +142,7 @@ class Recipe(models.Model):
         User,
         through='RecipeShop',
         related_name='recipe_shop',
-        verbose_name='рецепт в корзине',
-        default=False
+        verbose_name='рецепт в корзине'
     )
     ingredients = models.ManyToManyField(
         Ingredient,
